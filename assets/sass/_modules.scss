@@ -69,10 +69,19 @@ $block: 84;
 		background-image: url('../img/river.png');
 	}
 
+/* ==== EFFECT ==== */
+	.effect {
+		width: $block+px;
+		height: $block+px;
+		position: absolute;
+		background-color: transparent;
+		background-image: url('../img/apparate.png');
+	}
+
 /* ==== POSITION ==== */
 	@for $column from 1 through 50 {
 		@for $row from 1 through 50 {
-			.position-#{$column}-#{$row} {
+			.position-#{$column}-#{$row}, .position-#{$column}-#{$row} .inner {
 				$left: $block*($row - 1);
 				$top: $block*($column - 1);
 				background-position-y: -$top+px;

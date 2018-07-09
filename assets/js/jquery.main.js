@@ -178,6 +178,36 @@ var me = {};
 			element['row'] = row_this;
 		grid['structure'][element['column']][element['row']].occupied = true;
 		grid['element'].append('<div id="'+element['element']+'" class="character position-1-2" column="'+element['column']+'" row="'+element['row']+'" style="left:'+((element['column']-1)*config['block'])+'px;top:'+((element['row']-1)*config['block'])+'px;"></div>');
+			Action_ClearPosition('#'+element['element']);
+			Action_GetItems('#'+element['element']);
+			Effect_Apparate('#'+element['element']);
+	}
+
+/* ==== ITEMS ==== */
+
+	function Action_GetItems(who){
+
+	}
+
+/* ==== EFFECTS ==== */
+
+	function Effect_Apparate(who){
+		//Effect
+			$(who).append('<div class="effect apparate inner"></div>');
+		//Animate
+			$(who).addClass('position-'+2+'-'+2).css('opacity',0.25);
+			setTimeout(function(){
+				Action_ClearPosition(who);
+				$(who).addClass('position-'+4+'-'+2).css('opacity',0.50);
+				setTimeout(function(){
+					Action_ClearPosition(who);
+					$(who).addClass('position-'+3+'-'+2).css('opacity',0.75);
+					setTimeout(function(){
+						Action_ClearPosition(who);
+						$(who).addClass('position-'+1+'-'+2).css('opacity',1).find('.apparate').remove();
+					},config['timing']);
+				},config['timing']);
+			},config['timing']);
 	}
 
 /* ==== NAVIGATION ==== */
