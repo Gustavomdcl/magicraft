@@ -40,39 +40,39 @@
 				<!-- Doors -->
 					<div class="door" id="initial" column="9" row="5"></div><!-- .door -->
 				<!-- Tree -->
-					<div class="object element tree position-2-1" arrange="front" column="3" row="3" width="2"></div><!-- .object -->
-					<div class="object element tree" arrange="front" column="3" row="2" width="2" occupied="false"></div><!-- .object -->
+					<div class="element tree position-2-1" arrange="front" column="3" row="3" width="2"></div><!-- .element -->
+					<div class="element tree" arrange="front" column="3" row="2" width="2" occupied="false"></div><!-- .element -->
 				<!-- River 
-					<div class="object element river" arrange="front" column="8" row="4" width="2" height="2"></div><!-- .object -->
+					<div class="element river" arrange="front" column="8" row="4" width="2" height="2"></div><!-- .element -->
 				<!-- River2.0 -->
-					<div class="object element river" arrange="back" column="8" row="4"></div><!-- .object -->
-					<div class="object element river position-4-3" arrange="back" column="9" row="4"></div><!-- .object -->
-					<div class="object element river position-2-2" arrange="back" column="9" row="5"></div><!-- .object -->
-					<div class="object element river position-5-1" arrange="back" column="8" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="7" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="6" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="5" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="4" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="3" row="5"></div><!-- .object -->
-					<div class="object element river position-1-2" arrange="back" column="2" row="5"></div><!-- .object -->
-					<div class="object element river position-4-1" arrange="back" column="1" row="5"></div><!-- .object -->
-					<div class="object element river position-2-4" arrange="back" column="1" row="4" occupied="false"></div><!-- .object -->
-					<div class="object element river position-2-4" arrange="back" column="1" row="3" occupied="false"></div><!-- .object -->
-					<div class="object element river position-2-4" arrange="back" column="1" row="2" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-4" arrange="back" column="1" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="2" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="3" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="4" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="5" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="6" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="7" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-5" arrange="back" column="8" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-1-6" arrange="back" column="9" row="1" occupied="false"></div><!-- .object -->
-					<div class="object element river position-2-6" arrange="back" column="9" row="2" occupied="false"></div><!-- .object -->
-					<div class="object element river position-2-6" arrange="back" column="9" row="3" occupied="false"></div><!-- .object -->
+					<div class="element river" arrange="back" column="8" row="4"></div><!-- .element -->
+					<div class="element river position-4-3" arrange="back" column="9" row="4"></div><!-- .element -->
+					<div class="element river position-2-2" arrange="back" column="9" row="5"></div><!-- .element -->
+					<div class="element river position-5-1" arrange="back" column="8" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="7" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="6" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="5" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="4" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="3" row="5"></div><!-- .element -->
+					<div class="element river position-1-2" arrange="back" column="2" row="5"></div><!-- .element -->
+					<div class="element river position-4-1" arrange="back" column="1" row="5"></div><!-- .element -->
+					<div class="element river position-2-4" arrange="back" column="1" row="4" occupied="false"></div><!-- .element -->
+					<div class="element river position-2-4" arrange="back" column="1" row="3" occupied="false"></div><!-- .element -->
+					<div class="element river position-2-4" arrange="back" column="1" row="2" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-4" arrange="back" column="1" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="2" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="3" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="4" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="5" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="6" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="7" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-5" arrange="back" column="8" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-1-6" arrange="back" column="9" row="1" occupied="false"></div><!-- .element -->
+					<div class="element river position-2-6" arrange="back" column="9" row="2" occupied="false"></div><!-- .element -->
+					<div class="element river position-2-6" arrange="back" column="9" row="3" occupied="false"></div><!-- .element -->
 				<!-- Flowers -->
-					<div class="object element scene" arrange="back" column="6" row="2" occupied="false"></div><!-- .object -->
-					<div class="object element scene" arrange="back" column="3" row="4" occupied="false"></div><!-- .object -->
+					<div class="element scene" arrange="back" column="6" row="2" occupied="false"></div><!-- .element -->
+					<div class="element scene" arrange="back" column="3" row="4" occupied="false"></div><!-- .element -->
 			</div><!-- #grid -->
 		</div><!-- .app -->
 	</div><!-- .canvas -->
