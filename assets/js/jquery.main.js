@@ -208,6 +208,13 @@ var me = {};
 					},config['timing']);
 				},config['timing']);
 			},config['timing']);
+			$(who).animate({
+				top: "-=20"
+			},0, function() {
+				$(who).animate({
+					top: "+=20"
+				},config['timing']*3, function() {});
+			});
 	}
 
 /* ==== NAVIGATION ==== */
@@ -223,6 +230,10 @@ var me = {};
 			Action_CharacterMovement(me['who'],'up','-',4);
 		} else if (e.keyCode==83) {
 			Action_Sit(me['who']);
+		} else if (e.keyCode==32) {
+			Action_Jump(me['who']);
+		} else if (e.keyCode==65) {
+			Effect_Apparate(me['who']);
 		}
 	}
 
@@ -315,7 +326,7 @@ var me = {};
 		return value;
 	}
 
-/* ==== ANIMATE CHARACTER MOVEMENT ==== */
+/* ==== ANIMATE CHARACTER ==== */
 	var Character_AnimateMovementLock = false;
 	function Action_AnimateCharacterMovement(who,position,direction) {
 		if(Character_AnimateMovementLock==false){
@@ -346,11 +357,22 @@ var me = {};
 		});
 	}
 	function Action_Sit(who){
-		if(Character_AnimateMovementLock==false||Character_MovementLock==false){
+		if(Character_AnimateMovementLock==false&&Character_MovementLock==false){
 			if($(who).hasClass('sit')){
 				$(who).removeClass('sit');
 			} else {
 				$(who).addClass('sit');
 			}
+		}
+	}
+	function Action_Jump(who){
+		if(Character_AnimateMovementLock==false&&Character_MovementLock==false&&!$(who).hasClass('sit')){
+			$(who).animate({
+				top: "-=20"
+			},config['timing'], function() {
+				$(who).animate({
+					top: "+=20"
+				},config['timing'], function() {});
+			});
 		}
 	}
