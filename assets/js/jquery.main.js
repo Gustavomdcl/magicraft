@@ -46,46 +46,44 @@ var me = {};
 	Setup_Elements();
 	function Setup_Elements(e){
 		$('.element').each(function(){
-			var element = {};
-				element['element'] = $(this);
-				element['column'] = Number(element['element'].attr('column'));
-				element['row'] = Number(element['element'].attr('row'));
-				element['occupied'] = element['element'].attr('occupied');
-				element['width'] = Number(element['element'].attr('width'));
-				element['height'] = Number(element['element'].attr('height'))
-			if(element['occupied']!='false'){
-				grid['structure'][element['column']][element['row']].occupied = true;
+			var column = Number($(this).attr('column'));
+			var row = Number($(this).attr('row'));
+			var occupied = $(this).attr('occupied');
+			var width = Number($(this).attr('width'));
+			var height = Number($(this).attr('height'))
+			if(occupied!='false'){
+				grid['structure'][column][row].occupied = true;
 			}
-			element['element'].css({
-				"top": ((element['row']-1)*config['block'])+"px",
-				"left": ((element['column']-1)*config['block'])+"px"
+			$(this).css({
+				"top": ((row-1)*config['block'])+"px",
+				"left": ((column-1)*config['block'])+"px"
 			});
-			var width_element = config['block']*element['width'];
-			if(element['element'].attr('width')!=''){
-				element['element'].css('width',width_element+'px');
-				if(element['occupied']!='false'){
+			var width_element = config['block']*width;
+			if($(this).attr('width')!=''){
+				$(this).css('width',width_element+'px');
+				if(occupied!='false'){
 					var i;
-					for (i = 1; i <= element['width']-1; i++) {
-						grid['structure'][element['column']+i][element['row']].occupied = true;
+					for (i = 1; i <= width-1; i++) {
+						grid['structure'][column+i][row].occupied = true;
 					}
 				}
 			}
-			var height_element = config['block']*element['height'];
-			if(element['element'].attr('height')!=''){
-				element['element'].css('height',height_element+'px');
-				if(element['occupied']!='false'){
+			var height_element = config['block']*height;
+			if($(this).attr('height')!=''){
+				$(this).css('height',height_element+'px');
+				if(occupied!='false'){
 					var i;
-					for (i = 1; i <= element['height']-1; i++) {
-						grid['structure'][element['column']][element['row']+i].occupied = true;
+					for (i = 1; i <= height-1; i++) {
+						grid['structure'][column][row+i].occupied = true;
 					}
 				}
 			}
-			if(element['element'].attr('height')!=''&&element['element'].attr('width')!=''){
+			if($(this).attr('height')!=''&&$(this).attr('width')!=''){
 				var i;
-				for (i = 1; i <= Number(element['element'].attr('height'))-1; i++) {
+				for (i = 1; i <= Number($(this).attr('height'))-1; i++) {
 					var j;
-					for (j = 1; j <= Number(element['element'].attr('width'))-1; j++) {
-						grid['structure'][element['column']+j][element['row']+i].occupied = true;
+					for (j = 1; j <= Number($(this).attr('width'))-1; j++) {
+						grid['structure'][column+j][row+i].occupied = true;
 					}
 				}
 			}
@@ -103,26 +101,21 @@ var me = {};
 			door['row'] = Number($(door['element']).attr('row'));
 		Action_ArrangeCharacter(who,door['column'],door['row'],1);
 	}
-	function Action_ArrangeCharacter(who,column_this,row_this,position){
-		var element = {};
-			element['element'] = who;
-			element['column'] = column_this;
-			element['row'] = row_this;
-		if(Action_OccupiedCheck(element['column'],element['row'],'simple')&&Action_OccupiedCheck(element['column'],element['row'],'exists')){
-			if(Action_OccupiedCheck(element['column'],element['row'],'occupied')){
-				Action_PlaceCharacter(element['element'],element['column'],element['row']);
+	function Action_ArrangeCharacter(who,column,row,position){
+		if(Action_OccupiedCheck(column,row,'simple')&&Action_OccupiedCheck(column,row,'exists')){
+			if(Action_OccupiedCheck(column,row,'occupied')){
+				Action_PlaceCharacter(who,column,row);
 			} else {
-				Action_ArrangeCharacterChecking(element['element'],element['column'],element['row'],position);
+				Action_ArrangeCharacterChecking(who,column,row,position);
 			}
 		} else {
-			Action_ArrangeCharacterChecking(element['element'],element['column'],element['row'],position);
+			Action_ArrangeCharacterChecking(who,column,row,position);
 		}
 	}
-	function Action_ArrangeCharacterChecking(who,column_this,row_this,position){
+	function Action_ArrangeCharacterChecking(who,column,row,position){
 		var element = {};
-			element['element'] = who;
-			element['column'] = column_this;
-			element['row'] = row_this;
+			element['column'] = column;
+			element['row'] = row;
 		var next,turn,polarity;
 		if(position==1){
 			next = 2;
@@ -151,36 +144,28 @@ var me = {};
 			}
 			if(Action_OccupiedCheck(element['column'],element['row'],'simple')&&Action_OccupiedCheck(element['column'],element['row'],'exists')){
 				if(Action_OccupiedCheck(element['column'],element['row'],'occupied')){
-					Action_PlaceCharacter(element['element'],element['column'],element['row']);
+					Action_PlaceCharacter(who,element['column'],element['row']);
 					break;
 				} else if(i==config['placement']){
-					Action_ArrangeCharacter(element['element'],element['column'],element['row'],next);
+					Action_ArrangeCharacter(who,element['column'],element['row'],next);
 					break;
 				} 
 			} else if (i==config['placement']){
-				Action_ArrangeCharacter(element['element'],element['column'],element['row'],next);
+				Action_ArrangeCharacter(who,element['column'],element['row'],next);
 				break;
 			}
 		}
 	}
-	function Action_PlaceCharacter(who,column_this,row_this){
-		var element = {};
-			element['element'] = who;
-			element['column'] = column_this;
-			element['row'] = row_this;
-		Action_ArrangeGrid(element['column'],element['row']);
-		Action_PlaceAllCharacters(element['element'],element['column'],element['row']);
+	function Action_PlaceCharacter(who,column,row){
+		Action_ArrangeGrid(column,row);
+		Action_PlaceAllCharacters(who,column,row);
 	}
-	function Action_PlaceAllCharacters(who,column_this,row_this){
-		var element = {};
-			element['element'] = who;
-			element['column'] = column_this;
-			element['row'] = row_this;
-		grid['structure'][element['column']][element['row']].occupied = true;
-		grid['element'].append('<div id="'+element['element']+'" class="character position-1-2" column="'+element['column']+'" row="'+element['row']+'" style="left:'+((element['column']-1)*config['block'])+'px;top:'+((element['row']-1)*config['block'])+'px;"></div>');
-			Action_ClearPosition('#'+element['element']);
-			Action_GetItems('#'+element['element']);
-			Effect_Apparate('#'+element['element']);
+	function Action_PlaceAllCharacters(who,column,row){
+		grid['structure'][column][row].occupied = true;
+		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block'])+'px;top:'+((row-1)*config['block'])+'px;"></div>');
+			Action_ClearPosition('#'+who);
+			Action_GetItems('#'+who);
+			Effect_Apparate('#'+who);
 	}
 
 /* ==== ITEMS ==== */
@@ -241,24 +226,22 @@ var me = {};
 	var Character_MovementLock = false;
 	function Action_CharacterMovement(who,position,polarity,direction){
 		Action_AnimateCharacterMovement(who,position,direction);
-		var element = {};
-			element['element'] = $(who);
-			element['column'] = element['element'].attr('column');
-			element['row'] = element['element'].attr('row');
+		var column = $(who).attr('column');
+		var row = $(who).attr('row');
 		var column_next;
 		var row_next;
 		if(position=='right'){
-			column_next = Number(element['column'])+1;
-			row_next = element['row'];
+			column_next = Number(column)+1;
+			row_next = row;
 		} else if(position=='left'){
-			column_next = Number(element['column'])-1;
-			row_next = element['row'];
+			column_next = Number(column)-1;
+			row_next = row;
 		} else if(position=='up'){
-			column_next = element['column'];
-			row_next = Number(element['row'])-1;
+			column_next = column;
+			row_next = Number(row)-1;
 		} else if(position=='down'){
-			column_next = element['column'];
-			row_next = Number(element['row'])+1;
+			column_next = column;
+			row_next = Number(row)+1;
 		}
 		if(Action_OccupiedCheck(column_next,row_next,'simple')&&Action_OccupiedCheck(column_next,row_next,'exists')){
 			if(Action_OccupiedCheck(column_next,row_next,'occupied')){
@@ -268,11 +251,11 @@ var me = {};
 					} else if(polarity=='-'){
 						polarity_grid='+';
 					}
-					grid['structure'][element['column']][element['row']].occupied = false;
+					grid['structure'][column][row].occupied = false;
 					grid['structure'][column_next][row_next].occupied = true;
 					Character_MovementLock = true;
 					if (position=='right'||position=='left'){
-						element['element'].animate({
+						$(who).animate({
 							left: polarity+"="+config['block']
 						},config['timing']*3, function() {
 							Character_MovementLock = false;
@@ -281,12 +264,12 @@ var me = {};
 							left: polarity_grid+"="+config['block']
 						},config['timing']*3, function() {});
 						if(position=='right'){
-							element['element'].attr('column',Number(element['column'])+1);
+							$(who).attr('column',Number(column)+1);
 						} else if(position=='left'){
-							element['element'].attr('column',Number(element['column'])-1);
+							$(who).attr('column',Number(column)-1);
 						}
 					} else if (position=='up'||position=='down'){
-						element['element'].animate({
+						$(who).animate({
 							top: polarity+"="+config['block']
 						},config['timing']*3, function() {
 							Character_MovementLock = false;
@@ -295,9 +278,9 @@ var me = {};
 							top: polarity_grid+"="+config['block']
 						},config['timing']*3, function() {});
 						if(position=='up'){
-							element['element'].attr('row',Number(element['row'])-1);
+							$(who).attr('row',Number(row)-1);
 						} else if(position=='down'){
-							element['element'].attr('row',Number(element['row'])+1);
+							$(who).attr('row',Number(row)+1);
 						}
 					}
 				}
