@@ -78,6 +78,22 @@ $block: 84;
 		background-image: url('../img/apparate.png');
 	}
 
+/* ==== ITEM ==== */
+
+	.item {
+		width: $block+px;
+		height: $block+px;
+		position: absolute;
+		background-color: transparent;
+		background-image: url('../img/apparate.png');
+	}
+
+/* ==== HAIR ==== */
+
+	.chanel {
+		background-image: url('../img/chanel.png');
+	}
+
 /* ==== POSITION ==== */
 	@for $column from 1 through 50 {
 		@for $row from 1 through 50 {

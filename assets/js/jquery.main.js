@@ -9,9 +9,13 @@ var grid = {};
 	grid['structure'] = new Array();
 	grid['column'] = Number(grid['element'].attr('column'));
 	grid['row'] = Number(grid['element'].attr('row'));
-var me = {};
-	me['name'] = 'odd_gus';
-	me['who'] = '#'+me['name'];
+var me = 'odd_gus';
+var character = {};
+	character[me] = {};
+		character[me]['name'] = 'odd_gus';
+		character[me]['who'] = '#'+character[me]['name'];
+		character[me]['item'] = {};
+		character[me]['item']['hair'] = 'chanel';
 
 
 /* ==== GRID ==== */
@@ -91,7 +95,7 @@ var me = {};
 	}
 
 /* ==== LOAD CHARACTER ==== */
-	Load_Character(me['name'],'#initial');
+	Load_Character(character[me]['name'],'#initial');
 	config['placement'];
 	function Load_Character(who,element){
 		config['placement'] = 0;
@@ -158,20 +162,22 @@ var me = {};
 	}
 	function Action_PlaceCharacter(who,column,row){
 		Action_ArrangeGrid(column,row);
-		Action_PlaceAllCharacters(who,column,row);
+		Action_PlaceAllCharacters(who,character[me]['item'],column,row);
 	}
-	function Action_PlaceAllCharacters(who,column,row){
+	function Action_PlaceAllCharacters(who,item,column,row){
 		grid['structure'][column][row].occupied = true;
 		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block'])+'px;top:'+((row-1)*config['block'])+'px;"></div>');
 			Action_ClearPosition('#'+who);
-			Action_GetItems('#'+who);
+			Action_GetItems('#'+who,item);
 			Effect_Apparate('#'+who);
 	}
 
 /* ==== ITEMS ==== */
 
-	function Action_GetItems(who){
-
+	function Action_GetItems(who,item){
+		$.each(item, function(index,value){
+			$(who).append('<div class="inner item '+index+' '+value+'"></div>');
+		}); 
 	}
 
 /* ==== EFFECTS ==== */
@@ -206,19 +212,19 @@ var me = {};
 	window.onkeydown = Action_KeyPressed;
 	function Action_KeyPressed(e) {
 		if (e.keyCode==39) {
-			Action_CharacterMovement(me['who'],'right','+',3);
+			Action_CharacterMovement(character[me]['who'],'right','+',3);
 		} else if (e.keyCode==40) {
-			Action_CharacterMovement(me['who'],'down','+',1);
+			Action_CharacterMovement(character[me]['who'],'down','+',1);
 		} else if (e.keyCode==37) {
-			Action_CharacterMovement(me['who'],'left','-',2);
+			Action_CharacterMovement(character[me]['who'],'left','-',2);
 		} else if (e.keyCode==38) {
-			Action_CharacterMovement(me['who'],'up','-',4);
+			Action_CharacterMovement(character[me]['who'],'up','-',4);
 		} else if (e.keyCode==83) {
-			Action_Sit(me['who']);
+			Action_Sit(character[me]['who']);
 		} else if (e.keyCode==32) {
-			Action_Jump(me['who']);
+			Action_Jump(character[me]['who']);
 		} else if (e.keyCode==65) {
-			Effect_Apparate(me['who']);
+			Effect_Apparate(character[me]['who']);
 		}
 	}
 
