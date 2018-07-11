@@ -15,6 +15,7 @@ var character = {};
 		character[me]['name'] = 'odd_gus';
 		character[me]['who'] = '#'+character[me]['name'];
 		character[me]['item'] = {};
+		character[me]['item']['upper-body'] = 'cloak';
 		character[me]['item']['hair'] = 'chanel';
 
 

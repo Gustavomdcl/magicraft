@@ -94,6 +94,12 @@ $block: 84;
 		background-image: url('../img/chanel.png');
 	}
 
+/* ==== UPPER BODY ==== */
+
+	.cloak {
+		background-image: url('../img/cloak.png');
+	}
+
 /* ==== POSITION ==== */
 	@for $column from 1 through 50 {
 		@for $row from 1 through 50 {
