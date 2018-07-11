@@ -105,7 +105,7 @@ $block: 84;
 			}
 		}
 	}
-	.sit {
+	.sit, .sit .inner {
 		$left: $block*3;
 		background-position-x: -$left+px;
 	}

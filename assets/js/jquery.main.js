@@ -3,12 +3,12 @@
 var config = {};
 	config['block'] = 84;
 	config['timing'] = 100;
+	config['app'] = $('.app');
+	config['movement_lock'] = true;
+	config['animation_movement_lock'] = true;
+	config['map'] = 'ilha';
+	config['door'] = 'initial';
 var grid = {};
-	grid['who'] = '#grid';
-	grid['element'] = $(grid['who']);
-	grid['structure'] = new Array();
-	grid['column'] = Number(grid['element'].attr('column'));
-	grid['row'] = Number(grid['element'].attr('row'));
 var me = 'odd_gus';
 var character = {};
 	character[me] = {};
@@ -19,35 +19,45 @@ var character = {};
 
 
 /* ==== GRID ==== */
-	Setup_Grid();
-	function Setup_Grid(){
-		grid['width'] = grid['column']*config['block'];
-		grid['height'] = grid['row']*config['block'];
-		grid['element'].width(grid['column']*config['block']).height(grid['row']*config['block']);
-		var i;
-		for (i = 1; i <= grid['column']; i++) { 
-			grid['structure'][i] = new Array();
-			var j;
-			for (j = 1; j <= grid['row']; j++) { 
-				grid['structure'][i][j] = {
-					occupied: false
-				};
+	Setup_Grid('ilha','initial');
+	function Setup_Grid(map,door){
+		var url = 'map/'+map+'.html';
+		config['app'].load(url, function() {
+				grid['who'] = '#grid';
+				grid['element'] = $(grid['who']);
+				grid['structure'] = new Array();
+				grid['column'] = Number(grid['element'].attr('column'));
+				grid['row'] = Number(grid['element'].attr('row'));
+				grid['width'] = grid['column']*config['block'];
+				grid['height'] = grid['row']*config['block'];
+			grid['element'].width(grid['column']*config['block']).height(grid['row']*config['block']);
+			var i;
+			for (i = 1; i <= grid['column']; i++) { 
+				grid['structure'][i] = new Array();
+				var j;
+				for (j = 1; j <= grid['row']; j++) { 
+					grid['structure'][i][j] = {
+						occupied: false
+					};
+				}
 			}
-		}
+			//FUNCTIONS
+			Setup_Elements();
+			Load_Character(character[me]['name'],'#'+door);
+		});
 	}
-	function Action_ArrangeGrid(column_this,row_this){
-		var left = (column_this-1)*config['block'];
+	function Action_ArrangeGrid(column,row){
+		var left = (column-1)*config['block'];
 		grid['element'].css({
 			'left': '-'+left+'px'
 		});
-		var top = (row_this-1)*config['block'];
+		var top = (row-1)*config['block'];
 		grid['element'].css({
 			'top': '-'+top+'px'
 		});
 	}
 
 /* ==== ELEMENT ==== */
-	Setup_Elements();
 	function Setup_Elements(e){
 		$('.element').each(function(){
 			var column = Number($(this).attr('column'));
@@ -95,8 +105,6 @@ var character = {};
 	}
 
 /* ==== LOAD CHARACTER ==== */
-	Load_Character(character[me]['name'],'#initial');
-	config['placement'];
 	function Load_Character(who,element){
 		config['placement'] = 0;
 		var door = {};
@@ -162,18 +170,20 @@ var character = {};
 	}
 	function Action_PlaceCharacter(who,column,row){
 		Action_ArrangeGrid(column,row);
-		Action_PlaceAllCharacters(who,character[me]['item'],column,row);
+		character[who]['map'] = config['map'];
+		Action_PlaceAllCharacters(who,character[who]['item'],column,row);
 	}
 	function Action_PlaceAllCharacters(who,item,column,row){
 		grid['structure'][column][row].occupied = true;
 		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block'])+'px;top:'+((row-1)*config['block'])+'px;"></div>');
+		character[who]['column'] = column;
+		character[who]['row'] = row;
 			Action_ClearPosition('#'+who);
 			Action_GetItems('#'+who,item);
 			Effect_Apparate('#'+who);
 	}
 
 /* ==== ITEMS ==== */
-
 	function Action_GetItems(who,item){
 		$.each(item, function(index,value){
 			$(who).append('<div class="inner item '+index+' '+value+'"></div>');
@@ -229,7 +239,7 @@ var character = {};
 	}
 
 /* ==== CHARACTER MOVEMENT ==== */
-	var Character_MovementLock = false;
+	config['movement_lock'] = false;
 	function Action_CharacterMovement(who,position,polarity,direction){
 		Action_AnimateCharacterMovement(who,position,direction);
 		var column = $(who).attr('column');
@@ -251,7 +261,7 @@ var character = {};
 		}
 		if(Action_OccupiedCheck(column_next,row_next,'simple')&&Action_OccupiedCheck(column_next,row_next,'exists')){
 			if(Action_OccupiedCheck(column_next,row_next,'occupied')){
-				if(Character_MovementLock==false){
+				if(config['movement_lock']==false){
 					if(polarity=='+'){
 						polarity_grid='-';
 					} else if(polarity=='-'){
@@ -259,12 +269,14 @@ var character = {};
 					}
 					grid['structure'][column][row].occupied = false;
 					grid['structure'][column_next][row_next].occupied = true;
-					Character_MovementLock = true;
+					config['movement_lock'] = true;
+					character[$(who).attr('id')]['column'] = column_next;
+					character[$(who).attr('id')]['row'] = row_next;
 					if (position=='right'||position=='left'){
 						$(who).animate({
 							left: polarity+"="+config['block']
 						},config['timing']*3, function() {
-							Character_MovementLock = false;
+							config['movement_lock'] = false;
 						});
 						grid['element'].animate({
 							left: polarity_grid+"="+config['block']
@@ -278,7 +290,7 @@ var character = {};
 						$(who).animate({
 							top: polarity+"="+config['block']
 						},config['timing']*3, function() {
-							Character_MovementLock = false;
+							config['movement_lock'] = false;
 						});
 						grid['element'].animate({
 							top: polarity_grid+"="+config['block']
@@ -293,33 +305,33 @@ var character = {};
 			}
 		}
 	}
-	function Action_OccupiedCheck(column_this,row_this,type){
+	function Action_OccupiedCheck(column,row,type){
 		var value;
 		if(type=='simple'){
-			value = row_this != 0 &&
-			column_this != 0 &&
-			row_this <= grid['row'] &&
-			column_this <= grid['column'];
+			value = row != 0 &&
+			column != 0 &&
+			row <= grid['row'] &&
+			column <= grid['column'];
 		} else if(type=='exists'){
-			value = grid['structure'][column_this]!=null&&
-			grid['structure'][column_this][row_this]!=null;
+			value = grid['structure'][column]!=null&&
+			grid['structure'][column][row]!=null;
 		} else if(type=='occupied'){
-			value = grid['structure'][column_this][row_this].occupied == false;
+			value = grid['structure'][column][row].occupied == false;
 		} else {
-			value = grid['structure'][column_this][row_this].occupied == false &&
-			row_this != 0 &&
-			column_this != 0 &&
-			row_this <= grid['row'] &&
-			column_this <= grid['column'];
+			value = grid['structure'][column][row].occupied == false &&
+			row != 0 &&
+			column != 0 &&
+			row <= grid['row'] &&
+			column <= grid['column'];
 		}
 		return value;
 	}
 
 /* ==== ANIMATE CHARACTER ==== */
-	var Character_AnimateMovementLock = false;
+	config['animation_movement_lock'] = false;
 	function Action_AnimateCharacterMovement(who,position,direction) {
-		if(Character_AnimateMovementLock==false){
-			Character_AnimateMovementLock = true;
+		if(config['animation_movement_lock']==false){
+			config['animation_movement_lock'] = true;
 			Action_ClearPosition(who);
 			$(who).removeClass('sit').addClass('position-'+direction+'-'+1);
 			setTimeout(function(){
@@ -331,7 +343,7 @@ var character = {};
 					setTimeout(function(){
 						Action_ClearPosition(who);
 						$(who).addClass('position-'+direction+'-'+2);
-						Character_AnimateMovementLock = false;
+						config['animation_movement_lock'] = false;
 					},config['timing']);
 				},config['timing']);
 			},config['timing']);
@@ -346,7 +358,7 @@ var character = {};
 		});
 	}
 	function Action_Sit(who){
-		if(Character_AnimateMovementLock==false&&Character_MovementLock==false){
+		if(config['animation_movement_lock']==false&&config['movement_lock']==false){
 			if($(who).hasClass('sit')){
 				$(who).removeClass('sit');
 			} else {
@@ -355,7 +367,7 @@ var character = {};
 		}
 	}
 	function Action_Jump(who){
-		if(Character_AnimateMovementLock==false&&Character_MovementLock==false&&!$(who).hasClass('sit')){
+		if(config['animation_movement_lock']==false&&config['movement_lock']==false&&!$(who).hasClass('sit')){
 			$(who).animate({
 				top: "-=20"
 			},config['timing'], function() {
