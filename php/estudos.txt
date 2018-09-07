@@ -1,0 +1,16 @@
+MYSQL ========
+https://www.sitepoint.com/using-node-mysql-javascript-client/ 
+https://codeforgeek.com/2015/01/nodejs-mysql-tutorial/
+
+http://www.clusterdb.com/mysql/mysql-cluster-with-node-js
+
+
+MYSQL LOGIN ========
+http://stackoverflow.com/questions/22375176/how-to-make-login-form-in-node-js-using-mysql-database
+https://scotch.io/tutorials/easy-node-authentication-setup-and-local
+
+ESSEEEE https://www.quora.com/How-do-I-create-a-login-page-in-Node-js-with-MySQL-in-Express
+parece com esse de cima: https://gist.github.com/manjeshpv/84446e6aa5b3689e8b84
+
+
+https://auth0.com/authenticate/nodejs/mysql

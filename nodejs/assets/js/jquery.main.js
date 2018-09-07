@@ -1,7 +1,7 @@
 /*! Main v1.00.0 | (c) 2014, 2014 | */
 
 var config = {};
-	config['block'] = 84;
+	config['block'] = {size:84};
 	config['timing'] = 100;
 	config['app'] = $('.app');
 	config['movement_lock'] = true;
@@ -9,29 +9,29 @@ var config = {};
 	config['map'] = 'ilha';
 	config['door'] = 'initial';
 var grid = {};
-var me = 'odd_gus';
-var character = {};
+var me = 'odd_gus';//MYSQL
+var character = {};//SOCKET.IO VERIFICA SE EXISTEM PLAYERS ONLINE
 	character[me] = {};
 		character[me]['name'] = 'odd_gus';
 		character[me]['who'] = '#'+character[me]['name'];
 		character[me]['item'] = {};
-		character[me]['item']['upper-body'] = 'cloak';
-		character[me]['item']['hair'] = 'chanel';
+			character[me]['item']['upper-body'] = 'cloak';
+			character[me]['item']['hair'] = 'chanel';
 
 
 /* ==== GRID ==== */
-	Setup_Grid('ilha','initial');
+	Setup_Grid(config['map'],config['door']);
 	function Setup_Grid(map,door){
 		var url = 'map/'+map+'.html';
-		config['app'].load(url, function() {
+		config['app'].empty().load(url, function() {
 				grid['who'] = '#grid';
 				grid['element'] = $(grid['who']);
 				grid['structure'] = new Array();
 				grid['column'] = Number(grid['element'].attr('column'));
 				grid['row'] = Number(grid['element'].attr('row'));
-				grid['width'] = grid['column']*config['block'];
-				grid['height'] = grid['row']*config['block'];
-			grid['element'].width(grid['column']*config['block']).height(grid['row']*config['block']);
+				grid['width'] = grid['column']*config['block']['size'];
+				grid['height'] = grid['row']*config['block']['size'];
+			grid['element'].width(grid['column']*config['block']['size']).height(grid['row']*config['block']['size']);
 			var i;
 			for (i = 1; i <= grid['column']; i++) { 
 				grid['structure'][i] = new Array();
@@ -44,15 +44,16 @@ var character = {};
 			}
 			//FUNCTIONS
 			Setup_Elements();
+			Setup_Doors();
 			Load_Character(character[me]['name'],'#'+door);
 		});
 	}
 	function Action_ArrangeGrid(column,row){
-		var left = (column-1)*config['block'];
+		var left = (column-1)*config['block']['size'];
 		grid['element'].css({
 			'left': '-'+left+'px'
 		});
-		var top = (row-1)*config['block'];
+		var top = (row-1)*config['block']['size'];
 		grid['element'].css({
 			'top': '-'+top+'px'
 		});
@@ -65,15 +66,15 @@ var character = {};
 			var row = Number($(this).attr('row'));
 			var occupied = $(this).attr('occupied');
 			var width = Number($(this).attr('width'));
-			var height = Number($(this).attr('height'))
+			var height = Number($(this).attr('height'));
 			if(occupied!='false'){
 				grid['structure'][column][row].occupied = true;
 			}
 			$(this).css({
-				"top": ((row-1)*config['block'])+"px",
-				"left": ((column-1)*config['block'])+"px"
+				"top": ((row-1)*config['block']['size'])+"px",
+				"left": ((column-1)*config['block']['size'])+"px"
 			});
-			var width_element = config['block']*width;
+			var width_element = config['block']['size']*width;
 			if($(this).attr('width')!=''){
 				$(this).css('width',width_element+'px');
 				if(occupied!='false'){
@@ -83,7 +84,7 @@ var character = {};
 					}
 				}
 			}
-			var height_element = config['block']*height;
+			var height_element = config['block']['size']*height;
 			if($(this).attr('height')!=''){
 				$(this).css('height',height_element+'px');
 				if(occupied!='false'){
@@ -94,11 +95,13 @@ var character = {};
 				}
 			}
 			if($(this).attr('height')!=''&&$(this).attr('width')!=''){
-				var i;
-				for (i = 1; i <= Number($(this).attr('height'))-1; i++) {
-					var j;
-					for (j = 1; j <= Number($(this).attr('width'))-1; j++) {
-						grid['structure'][column+j][row+i].occupied = true;
+				if(occupied!='false'){
+					var i;
+					for (i = 1; i <= Number($(this).attr('height'))-1; i++) {
+						var j;
+						for (j = 1; j <= Number($(this).attr('width'))-1; j++) {
+							grid['structure'][column+j][row+i].occupied = true;
+						}
 					}
 				}
 			}
@@ -176,7 +179,7 @@ var character = {};
 	}
 	function Action_PlaceAllCharacters(who,item,column,row){
 		grid['structure'][column][row].occupied = true;
-		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block'])+'px;top:'+((row-1)*config['block'])+'px;"></div>');
+		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block']['size'])+'px;top:'+((row-1)*config['block']['size'])+'px;"></div>');
 		character[who]['column'] = column;
 		character[who]['row'] = row;
 			Action_ClearPosition('#'+who);
@@ -189,6 +192,37 @@ var character = {};
 		$.each(item, function(index,value){
 			$(who).append('<div class="inner item '+index+' '+value+'"></div>');
 		}); 
+	}
+
+/* ==== DOORS ==== */
+	function Setup_Doors(e){
+		$('.door').each(function(){
+			var column = Number($(this).attr('column'));
+			var row = Number($(this).attr('row'));
+			var width = Number($(this).attr('width'));
+			var height = Number($(this).attr('height'));
+			$(this).css({
+				"top": ((row-1)*config['block']['size'])+"px",
+				"left": ((column-1)*config['block']['size'])+"px"
+			});
+			var width_door = config['block']['size']*width;
+			if($(this).attr('width')!=''){
+				$(this).css('width',width_door+'px');
+			}
+			var height_element = config['block']['size']*height;
+			if($(this).attr('height')!=''){
+				$(this).css('height',height_element+'px');
+			}
+			if($(this).hasClass('out')){
+				$(this).click(function(e){
+					e.preventDefault();
+					if(confirm("Ir para outra tela?\nVocê irá para outro lugar")){
+						config['map'] = $(this).attr('id');
+						Setup_Grid(config['map'],config['door']);
+					}
+				});
+			}
+		});
 	}
 
 /* ==== EFFECTS ==== */
@@ -275,12 +309,12 @@ var character = {};
 					character[$(who).attr('id')]['row'] = row_next;
 					if (position=='right'||position=='left'){
 						$(who).animate({
-							left: polarity+"="+config['block']
+							left: polarity+"="+config['block']['size']
 						},config['timing']*3, function() {
 							config['movement_lock'] = false;
 						});
 						grid['element'].animate({
-							left: polarity_grid+"="+config['block']
+							left: polarity_grid+"="+config['block']['size']
 						},config['timing']*3, function() {});
 						if(position=='right'){
 							$(who).attr('column',Number(column)+1);
@@ -289,12 +323,12 @@ var character = {};
 						}
 					} else if (position=='up'||position=='down'){
 						$(who).animate({
-							top: polarity+"="+config['block']
+							top: polarity+"="+config['block']['size']
 						},config['timing']*3, function() {
 							config['movement_lock'] = false;
 						});
 						grid['element'].animate({
-							top: polarity_grid+"="+config['block']
+							top: polarity_grid+"="+config['block']['size']
 						},config['timing']*3, function() {});
 						if(position=='up'){
 							$(who).attr('row',Number(row)-1);

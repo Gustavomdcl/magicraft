@@ -50,6 +50,17 @@ $block: 84;
 		z-index: 10;
 	}
 
+/* ==== DOOR ==== */
+	.door {
+		width: $block+px;
+		height: $block+px;
+		position: absolute;
+		z-index: 3000;
+		&.out {
+			cursor: pointer;
+		}
+	}
+
 /* ==== GROUND ==== */
 	.grass {
 		background-image: url('../img/grass.png');
