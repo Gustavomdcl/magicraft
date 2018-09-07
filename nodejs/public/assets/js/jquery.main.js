@@ -51,6 +51,7 @@ var character = {};
 			$('#messages').append($('<li>').text(msg));
 		});
 		socket.on('delete', function(user){
+			grid['structure'][character[user]['column']][character[user]['row']].occupied = false;
 			$('#'+user).remove();
 			delete character[user];
 		});
@@ -65,6 +66,18 @@ var character = {};
 		});
 		socket.on('up', function(data){
 			Action_CharacterMovement(character[data['user']]['who'],'up','-',4);
+		});
+		socket.on('right movement', function(data){
+			Action_AnimateCharacterMovement(character[data['user']]['who'],'right',3);
+		});
+		socket.on('down movement', function(data){
+			Action_AnimateCharacterMovement(character[data['user']]['who'],'down',1);
+		});
+		socket.on('left movement', function(data){
+			Action_AnimateCharacterMovement(character[data['user']]['who'],'left',2);
+		});
+		socket.on('up movement', function(data){
+			Action_AnimateCharacterMovement(character[data['user']]['who'],'up',4);
 		});
 		socket.on('place', function(data){
 			var who = data['user'];
@@ -356,25 +369,27 @@ var character = {};
 	function Action_KeyPressed(e) {
 		if (e.keyCode==39) {
 			Action_CharacterMovement(character[me]['who'],'right','+',3);
+			Action_UpdateUser(character[me]['name'],'right movement');
 		} else if (e.keyCode==40) {
 			Action_CharacterMovement(character[me]['who'],'down','+',1);
+			Action_UpdateUser(character[me]['name'],'down movement');
 		} else if (e.keyCode==37) {
 			Action_CharacterMovement(character[me]['who'],'left','-',2);
+			Action_UpdateUser(character[me]['name'],'left movement');
 		} else if (e.keyCode==38) {
 			Action_CharacterMovement(character[me]['who'],'up','-',4);
+			Action_UpdateUser(character[me]['name'],'up movement');
 		} else if (e.keyCode==83) {
 			Action_UpdateUser(character[me]['name'],'sit');
 		} else if (e.keyCode==32) {
 			Action_UpdateUser(character[me]['name'],'jump');
-		} else if (e.keyCode==65) {
-			Effect_Apparate(character[me]['who']);
 		}
 	}
 
 /* ==== CHARACTER MOVEMENT ==== */
 	config['movement_lock'] = false;
 	function Action_CharacterMovement(who,position,polarity,direction){
-		Action_AnimateCharacterMovement(who,position,direction);
+		//Action_AnimateCharacterMovement(who,position,direction);
 		var column = $(who).attr('column');
 		var row = $(who).attr('row');
 		var column_next;

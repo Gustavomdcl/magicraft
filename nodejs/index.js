@@ -24,12 +24,12 @@
 //FUNÇÕES DO SOCKET.IO ====================
   var character = {};
     //teste
-      character['sapo'] = {};
+      /*character['sapo'] = {};
       character['sapo']['name'] = 'odd_gus';
       character['sapo']['who'] = '#'+character['sapo']['name'];
       character['sapo']['column'] = 7;
       character['sapo']['row'] = 4;
-      character['sapo']['item'] = {};
+      character['sapo']['item'] = {};*/
     //teste
   io.on('connection', function(socket){
     var user = {};
@@ -87,6 +87,18 @@
       } else if(data['action']=='left'){
         character[data['user']] = data['data'];
         socket.broadcast.emit('left',{user:data['user'],character:character[data['user']]});
+      } else if(data['action']=='up movement'){
+        //character[data['user']] = data['data'];
+        io.sockets.emit('up movement',{user:data['user'],character:character[data['user']]});
+      } else if(data['action']=='down movement'){
+        //character[data['user']] = data['data'];
+        io.sockets.emit('down movement',{user:data['user'],character:character[data['user']]});
+      } else if(data['action']=='right movement'){
+        //character[data['user']] = data['data'];
+        io.sockets.emit('right movement',{user:data['user'],character:character[data['user']]});
+      } else if(data['action']=='left movement'){
+        //character[data['user']] = data['data'];
+        io.sockets.emit('left movement',{user:data['user'],character:character[data['user']]});
       } else if(data['action']=='position'){
         character[data['user']] = data['data'];
         socket.broadcast.emit('position',{user:data['user'],character:character[data['user']]});
