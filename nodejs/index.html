@@ -38,10 +38,35 @@
 		<div class="app"></div><!-- .app -->
 	</div><!-- .canvas -->
 
+	<div class="chat">
+		<ul id="messages"></ul>
+	    <form action="">
+	      <input id="m" autocomplete="off" />
+	      <button>Enviar</button>
+	    </form>
+	</div><!-- .chat -->
+    <style type="text/css">
+    	.chat {
+    		position: fixed;
+    		z-index: 300000000;
+    		bottom: 0px;
+    		left: 0px;
+    	}
+    	#messages {
+    		color: #fff;
+    		background-color: #0000007d;
+    	}
+    	.login-error {
+    		color: #fff;
+    	}
+    </style>
+
 	<!-- javascript
 	======================================================== -->
 	<!-- jquery jquery.com -->
 	<script src="assets/min/jquery.min.js?v=1.11.0"></script>
+	<!-- socket.io -->
+	<script src="/socket.io/socket.io.js"></script><!-- Carrega o socket.io-client -->
 	<!-- suiting -->
 	<script src="assets/min/jquery.suiting.min.js"></script><!-- GRUNT http://blog.henriquesilverio.com/javascript-e-jquery/grunt-js-automatize-tarefas-e-otimize-o-seu-workflow/ -->
 	<!-- mobile -->
