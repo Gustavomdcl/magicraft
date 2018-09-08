@@ -64,13 +64,14 @@ var character = {};
 	function Setup_Socket(){
 		var count_messages = 0;
 		socket.on('message', function(data){
+			var count_local = count_messages;
 			$('#messages').append($('<li>').text(data['user']+': '+data['message']));
 			if($('#'+data['user']+' .talk').length){
 				$('#'+data['user']+' .talk').remove();
 			}
-			$('#'+data['user']).append('<p class="talk talk-'+count_messages+'">'+data['message']+'</p>');
+			$('#'+data['user']).append('<p class="talk talk-'+count_local+'">'+data['message']+'</p>');
 			setTimeout(function(){
-				$('#'+data['user']+' .talk-'+count_messages).remove();
+				$('#'+data['user']+' .talk-'+count_local).remove();
 				count_messages++;
 			},15000);
 		});
