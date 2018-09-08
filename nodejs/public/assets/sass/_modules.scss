@@ -3,6 +3,60 @@
 
 $block: 84;
 
+/* ==== LOADING ==== */
+	.loading {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		background-color: #000;
+		background-image: url(../img/loading.gif);
+		z-index: 100000;
+		background-repeat: no-repeat;
+		background-position: center;
+		filter: grayscale(100%);
+		-webkit-filter: grayscale(100%);
+	}
+
+/* ==== CHAT ==== */
+	.chat {
+		position: fixed;
+		z-index: 10000;
+		bottom: 0px;
+		left: 0px;
+	}
+	#messages {
+		color: #fff;
+		background-color: #0000007d;
+	}
+	.login-error {
+		color: #fff;
+	}
+	.talk {
+		background-color: #fff;
+		padding: 0px 10px;
+		border-radius: 5px;
+		position: absolute;
+		bottom: 80px;
+		width: 140px;
+		left: 50%;
+		margin-left: -70px;
+		text-align: center;
+		box-sizing: border-box;
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 5px 5px 0 5px;
+			border-color: #ffffff transparent transparent transparent;
+			left: 50%;
+			margin-left: -5px;
+			bottom: -5px; 
+		}
+	}
+
 /* ==== CONTAINERS ==== */
 	.canvas {
 		width: 100%;
@@ -32,7 +86,7 @@ $block: 84;
 		height: $block+px;
 		background-image: url('../img/character.png');
 		position: absolute;
-		z-index: 20;
+		z-index: 2;
 	}
 
 /* ==== ELEMENT ==== */
@@ -41,13 +95,13 @@ $block: 84;
 		height: $block+px;
 		background-color: #000;
 		position: absolute;
-		z-index: 30;
+		z-index: 3;
 	}
 	[arrange=front]{
-		z-index: 30;
+		z-index: 3;
 	}
 	[arrange=back]{
-		z-index: 10;
+		z-index: 1;
 	}
 
 /* ==== DOOR ==== */
@@ -55,7 +109,7 @@ $block: 84;
 		width: $block+px;
 		height: $block+px;
 		position: absolute;
-		z-index: 3000;
+		z-index: 20000;
 		&.out {
 			cursor: pointer;
 		}

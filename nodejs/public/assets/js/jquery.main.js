@@ -8,12 +8,26 @@ var config = {};
 	config['animation_movement_lock'] = true;
 	config['map'] = 'ilha';
 	config['door'] = 'initial';
+	config['loading'] = '.loading';
 var grid = {};
 var me;
 var character = {};
 
+/* ==== LOADING ==== */
+	$(document).ready(function(e){
+		setTimeout(function(){
+			Action_FadeOut(config['loading']);
+			Setup_Login();
+		},2000);
+	});
+	function Action_FadeOut(element){
+		$(element).fadeOut();
+	}
+	function Action_FadeIn(element){
+		$(element).fadeIn();
+	}
+
 /* ==== LOGIN ==== */
-	Setup_Login();
 	function Setup_Login(){
 		config['app'].append('
 			<form id="login">
@@ -34,6 +48,7 @@ var character = {};
 			character = data['character'];
 			Setup_Grid(config['map'],config['door']);
 			Setup_Socket();
+			Setup_Chat();
 			window.onkeydown = Action_KeyPressed;
 		});
 		socket.on('failed login', function(data){
@@ -47,8 +62,17 @@ var character = {};
 
 /* ==== SOCKET ON ==== */
 	function Setup_Socket(){
-		socket.on('message', function(msg){
-			$('#messages').append($('<li>').text(msg));
+		var count_messages = 0;
+		socket.on('message', function(data){
+			$('#messages').append($('<li>').text(data['user']+': '+data['message']));
+			if($('#'+data['user']+' .talk').length){
+				$('#'+data['user']+' .talk').remove();
+			}
+			$('#'+data['user']).append('<p class="talk talk-'+count_messages+'">'+data['message']+'</p>');
+			setTimeout(function(){
+				$('#'+data['user']+' .talk-'+count_messages).remove();
+				count_messages++;
+			},15000);
 		});
 		socket.on('delete', function(user){
 			grid['structure'][character[user]['column']][character[user]['row']].occupied = false;
@@ -95,12 +119,23 @@ var character = {};
 	}
 
 /* ==== CHAT ==== */
-	$('.chat form').submit(function(){
-		var mensagem = $('#m').val();
-		socket.emit('message', mensagem);
-		$('#m').val('');
-		return false;
-	});
+	function Setup_Chat(){
+		$('body').append('
+			<div class="chat">
+				<ul id="messages"></ul>
+				<form action="">
+					<input id="message" autocomplete="off" />
+					<button>Enviar</button>
+				</form>
+			</div><!-- .chat -->
+		');
+		$('.chat form').submit(function(){
+			var mensagem = $('#message').val();
+			socket.emit('message', mensagem);
+			$('#message').val('');
+			return false;
+		});
+	}
 
 /* ==== GRID ==== */
 	//Setup_Grid(config['map'],config['door']);
@@ -151,12 +186,14 @@ var character = {};
 			var occupied = $(this).attr('occupied');
 			var width = Number($(this).attr('width'));
 			var height = Number($(this).attr('height'));
+			var zindex = Number($(this).css('z-index'));
 			if(occupied!='false'){
 				grid['structure'][column][row].occupied = true;
 			}
 			$(this).css({
 				"top": ((row-1)*config['block']['size'])+"px",
-				"left": ((column-1)*config['block']['size'])+"px"
+				"left": ((column-1)*config['block']['size'])+"px",
+				"z-index": ((row*10)+zindex)
 			});
 			var width_element = config['block']['size']*width;
 			if($(this).attr('width')!=''){
@@ -285,7 +322,7 @@ var character = {};
 	}
 	function Action_PlaceAllCharacters(who,item,column,row,apparate){
 		grid['structure'][column][row].occupied = true;
-		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block']['size'])+'px;top:'+((row-1)*config['block']['size'])+'px;"></div>');
+		grid['element'].append('<div id="'+who+'" class="character position-1-2" column="'+column+'" row="'+row+'" style="left:'+((column-1)*config['block']['size'])+'px;top:'+((row-1)*config['block']['size'])+'px;z-index:'+((row*10)+2)+';"></div>');
 			Action_ClearPosition('#'+who);
 			Action_GetItems('#'+who,item);
 			if(apparate){
@@ -449,8 +486,12 @@ var character = {};
 						}
 						if(position=='up'){
 							$(who).attr('row',Number(row)-1);
+							setTimeout(function(){
+								$(who).css('z-index',((Number(row)-1)*10)+2);
+							},config['timing']*3);
 						} else if(position=='down'){
 							$(who).attr('row',Number(row)+1);
+							$(who).css('z-index',((Number(row)+1)*10)+2);
 						}
 					}
 					if(who==character[me]['who']){

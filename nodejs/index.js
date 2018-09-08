@@ -2,7 +2,10 @@
   var express = require('express');
   var app = express();
   var http = require('http').Server(app);
-  var io = require('socket.io')(http);
+  var io = require('socket.io')(http); 
+    //disconnect
+      //https://stackoverflow.com/questions/12815231/controlling-the-heartbeat-timeout-from-the-client-in-socket-io
+      //https://github.com/socketio/socket.io/issues/2297
   var mysql      = require('mysql');
   var connection = mysql.createConnection({
     host     : 'localhost',
@@ -110,7 +113,7 @@
       }
     });
     socket.on('message', function(message){
-      io.sockets.emit('message',user['name']+' '+message);
+      io.sockets.emit('message',{user:user['name'],message:message});
     });
     socket.on('disconnect', function(){
       io.sockets.emit('delete',user['name']);
