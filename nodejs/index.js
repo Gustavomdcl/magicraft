@@ -61,6 +61,31 @@
       socket.join(user['room']+'-'+user['map']);
       socket.emit('room start','go');
     });
+    socket.on('map change',function(map){
+      if(typeof(room[user['room']][map])!=="undefined"&&room[user['room']][map]!==null){
+        //delete
+          io.sockets.to(user['room']+'-'+user['map']).emit('delete',user['name']);
+          socket.leave(user['room']+'-'+user['map']);
+          delete room[user['room']][user['map']].character[user['name']];
+        //create
+          user['map'] = map;
+          socket.join(user['room']+'-'+user['map']);
+        //login
+          var me = user['name'];
+          room[user['room']][user['map']].character[me] = {};
+          room[user['room']][user['map']].character[me]['id'] = user['id'];
+          room[user['room']][user['map']].character[me]['name'] = me;
+          room[user['room']][user['map']].character[me]['who'] = '#'+room[user['room']][user['map']].character[me]['name'];
+          room[user['room']][user['map']].character[me]['item'] = {};
+          //items
+            room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
+            room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
+          socket.emit('start',{
+            user:me,
+            character:room[user['room']][user['map']].character
+          });
+      }
+    });
     socket.on('login', function(login){
       user['email'] = login['email'];
       user['password'] = md5(login['password']);
@@ -144,6 +169,7 @@
     socket.on('disconnect', function(){
       if(typeof(logged[user['name']])!=="undefined"&&logged[user['name']]!==null){
         io.sockets.to(user['room']+'-'+user['map']).emit('delete',user['name']);
+        socket.leave(user['room']+'-'+user['map']);
         delete room[user['room']][user['map']].character[user['name']];
         delete logged[user['name']];
       }

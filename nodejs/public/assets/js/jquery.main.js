@@ -9,6 +9,7 @@ var config = {};
 	config['map'] = 'ilha';
 	config['door'] = 'initial';
 	config['loading'] = '.loading';
+	config['started'] = false;
 var grid = {};
 var me;
 var character = {};
@@ -72,9 +73,13 @@ var character = {};
 			me = data['user'];
 			character = data['character'];
 			Setup_Grid(config['map'],config['door']);
-			Setup_Socket();
-			Setup_Chat();
-			window.onkeydown = Action_KeyPressed;
+			if(!config['started']){
+				Setup_Socket();
+				Setup_Chat();
+				window.onkeydown = Action_KeyPressed;
+				config['started'] = true;
+			}
+			$('#messages').empty();
 		});
 		socket.on('failed login', function(data){
 			if($('.login-error').length){
@@ -394,7 +399,8 @@ var character = {};
 					e.preventDefault();
 					if(confirm("Ir para outra tela?\nVocê irá para outro lugar")){
 						config['map'] = $(this).attr('id');
-						Setup_Grid(config['map'],config['door']);
+						socket.emit('map change',config['map']);
+						//Setup_Grid(config['map'],config['door']);
 					}
 				});
 			}
