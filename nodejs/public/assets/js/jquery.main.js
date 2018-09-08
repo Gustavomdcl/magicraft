@@ -17,7 +17,7 @@ var character = {};
 	$(document).ready(function(e){
 		setTimeout(function(){
 			Action_FadeOut(config['loading']);
-			Setup_Login();
+			Setup_Room();
 		},2000);
 	});
 	function Action_FadeOut(element){
@@ -25,6 +25,31 @@ var character = {};
 	}
 	function Action_FadeIn(element){
 		$(element).fadeIn();
+	}
+
+/* ==== ROOM ==== */
+	function Setup_Room(){
+		config['app'].append('
+			<form id="room-container">
+				<p>Escolha uma sala</p>
+				<input type="submit" class="room-unit" autocomplete="off" value="Charme" room="charm" />
+				<input type="submit" class="room-unit" autocomplete="off" value="Feitiço" room="spell" />
+				<input type="submit" class="room-unit" autocomplete="off" value="Azaração" room="jinx" />
+			</form>
+		');
+		$('form#room-container').submit(function(){
+			return false;
+		});
+		$('.room-unit').each(function(e){
+			$(this).click(function(i){
+				config['room'] = $(this).attr('room');
+				socket.emit('room',{room:config['room'],map:config['map']});
+				$('form#room-container').remove();
+			});
+		});
+		socket.on('room start', function(data){
+			Setup_Login();
+		});
 	}
 
 /* ==== LOGIN ==== */

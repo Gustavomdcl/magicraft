@@ -25,17 +25,42 @@
   });
 
 //FUNÇÕES DO SOCKET.IO ====================
-  var character = {};
+  var room = {};
+  var rooms = [
+    'charm',
+    'spell',
+    'jinx'
+  ];
+  var maps = [
+    'ilha',
+    'dark'
+  ];
+  var logged = {};
+  for (var i = rooms.length - 1; i >= 0; i--) {
+    room[rooms[i]] = {};
+    for (var j = maps.length - 1; j >= 0; j--) {
+      room[rooms[i]][maps[j]] = {};
+      room[rooms[i]][maps[j]].character = {};
+    }
+  }
     //teste
-      /*character['sapo'] = {};
-      character['sapo']['name'] = 'odd_gus';
-      character['sapo']['who'] = '#'+character['sapo']['name'];
-      character['sapo']['column'] = 7;
-      character['sapo']['row'] = 4;
-      character['sapo']['item'] = {};*/
+      /*room[user['room']][user['map']].character['sapo'] = {};
+      room[user['room']][user['map']].character['sapo']['name'] = 'odd_gus';
+      room[user['room']][user['map']].character['sapo']['who'] = '#'+room[user['room']][user['map']].character['sapo']['name'];
+      room[user['room']][user['map']].character['sapo']['column'] = 7;
+      room[user['room']][user['map']].character['sapo']['row'] = 4;
+      room[user['room']][user['map']].character['sapo']['item'] = {};*/
     //teste
   io.on('connection', function(socket){
     var user = {};
+    user['room'] = rooms[0];
+    user['map'] = maps[0];
+    socket.on('room', function(data){
+      user['room'] = data['room'];
+      user['map'] = data['map'];
+      socket.join(user['room']+'-'+user['map']);
+      socket.emit('room start','go');
+    });
     socket.on('login', function(login){
       user['email'] = login['email'];
       user['password'] = md5(login['password']);
@@ -46,24 +71,25 @@
         } else {
           if(results!=''){
             user['logged'] = false;
-            user['name'] = results[0]['user'];
-            user['id'] = results[0]['id'];
-            if(typeof(character[user['name']])!=="undefined"&&character[user['name']]!==null){
+            if(typeof(logged[results[0]['user']])!=="undefined"&&logged[results[0]['user']]!==null){
               user['logged'] = true;
             }
             if(user['logged'] == false){
+              user['name'] = results[0]['user'];
+              user['id'] = results[0]['id'];
               var me = user['name'];
-              character[me] = {};
-              character[me]['id'] = user['id'];
-              character[me]['name'] = me;
-              character[me]['who'] = '#'+character[me]['name'];
-              character[me]['item'] = {};
+              logged[me] = me;
+              room[user['room']][user['map']].character[me] = {};
+              room[user['room']][user['map']].character[me]['id'] = user['id'];
+              room[user['room']][user['map']].character[me]['name'] = me;
+              room[user['room']][user['map']].character[me]['who'] = '#'+room[user['room']][user['map']].character[me]['name'];
+              room[user['room']][user['map']].character[me]['item'] = {};
               //items
-                character[me]['item']['upper-body'] = 'cloak';
-                character[me]['item']['hair'] = 'chanel';
+                room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
+                room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
               socket.emit('start',{
                 user:me,
-                character:character
+                character:room[user['room']][user['map']].character
               });
             } else {
               socket.emit('failed login', 'Usuário logado em outra janela');
@@ -76,48 +102,51 @@
     });
     socket.on('update user', function(data){
       if(data['action']=='place'){
-        character[data['user']] = data['data'];
-        io.sockets.emit('place',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('place',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='up'){
-        character[data['user']] = data['data'];
-        socket.broadcast.emit('up',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        socket.broadcast.to(user['room']+'-'+user['map']).emit('up',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='down'){
-        character[data['user']] = data['data'];
-        socket.broadcast.emit('down',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        socket.broadcast.to(user['room']+'-'+user['map']).emit('down',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='right'){
-        character[data['user']] = data['data'];
-        socket.broadcast.emit('right',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        socket.broadcast.to(user['room']+'-'+user['map']).emit('right',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='left'){
-        character[data['user']] = data['data'];
-        socket.broadcast.emit('left',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        socket.broadcast.to(user['room']+'-'+user['map']).emit('left',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='up movement'){
-        //character[data['user']] = data['data'];
-        io.sockets.emit('up movement',{user:data['user'],character:character[data['user']]});
+        //room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('up movement',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='down movement'){
-        //character[data['user']] = data['data'];
-        io.sockets.emit('down movement',{user:data['user'],character:character[data['user']]});
+        //room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('down movement',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='right movement'){
-        //character[data['user']] = data['data'];
-        io.sockets.emit('right movement',{user:data['user'],character:character[data['user']]});
+        //room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('right movement',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='left movement'){
-        //character[data['user']] = data['data'];
-        io.sockets.emit('left movement',{user:data['user'],character:character[data['user']]});
+        //room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('left movement',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='position'){
-        character[data['user']] = data['data'];
-        socket.broadcast.emit('position',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        socket.broadcast.to(user['room']+'-'+user['map']).emit('position',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='jump'){
-        io.sockets.emit('jump',{user:data['user'],character:character[data['user']]});
+        io.sockets.to(user['room']+'-'+user['map']).emit('jump',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       } else if(data['action']=='sit'){
-        character[data['user']] = data['data'];
-        io.sockets.emit('sit',{user:data['user'],character:character[data['user']]});
+        room[user['room']][user['map']].character[data['user']] = data['data'];
+        io.sockets.to(user['room']+'-'+user['map']).emit('sit',{user:data['user'],character:room[user['room']][user['map']].character[data['user']]});
       }
     });
     socket.on('message', function(message){
-      io.sockets.emit('message',{user:user['name'],message:message});
+      io.sockets.to(user['room']+'-'+user['map']).emit('message',{user:user['name'],message:message});
     });
     socket.on('disconnect', function(){
-      io.sockets.emit('delete',user['name']);
-      delete character[user['name']];
+      if(typeof(logged[user['name']])!=="undefined"&&logged[user['name']]!==null){
+        io.sockets.to(user['room']+'-'+user['map']).emit('delete',user['name']);
+        delete room[user['room']][user['map']].character[user['name']];
+        delete logged[user['name']];
+      }
     });
   });
 
