@@ -152,18 +152,70 @@ $block: 84;
 		position: absolute;
 		background-color: transparent;
 		background-image: url('../img/apparate.png');
+		&.head{
+			z-index:11;
+		}
+		&.face{
+			z-index:10;
+		}
+		&.hair{
+			z-index:9;
+		}
+		&.beard{
+			z-index:8;
+		}
+		&.neck{
+			z-index:7;
+		}
+		&.upperBody{
+			z-index:6;
+		}
+		&.torso{
+			z-index:5;
+		}
+		&.leftHand{
+			z-index:4;
+		}
+		&.rightHand{
+			z-index:3;
+		}
+		&.legs{
+			z-index:2;
+		}
+		&.feet{
+			z-index:1;
+		}
 	}
+
 
 /* ==== HAIR ==== */
 
 	.chanel {
 		background-image: url('../img/chanel.png');
 	}
+	.long {
+		background-image: url('../img/long.png');
+	}
+
+/* ==== BEARD ==== */
+
+	.thin {
+		background-image: url('../img/thin.png');
+	}
+
+/* ==== FACE ==== */
+
+	.squared_glasses {
+		background-image: url('../img/squared_glasses.png');
+	}
 
 /* ==== UPPER BODY ==== */
 
-	.cloak {
-		background-image: url('../img/cloak.png');
+	.cloak_s {
+		background-image: url('../img/cloak_s.png');
+	}
+	.cloak_g {
+		background-image: url('../img/cloak_g.png');
 	}
 
 /* ==== POSITION ==== */

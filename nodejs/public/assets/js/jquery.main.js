@@ -129,6 +129,9 @@ desconectar automático - arrumar
 				$('#'+user).remove();
 				delete character[user];
 			});
+			socket.on('disconnect', function(disconnect){
+				window.location.replace('/disconnect');
+			});
 			socket.on('right', function(data){
 				Action_CharacterMovement(character[data['user']]['who'],'right','+',3);
 			});

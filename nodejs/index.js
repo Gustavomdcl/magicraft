@@ -15,6 +15,8 @@
   });
   var md5 = require('md5');
 
+  var disconnect = 'disconnect';
+
 //EXPRESS ====================
 
   app.use(express.static('public'));
@@ -22,6 +24,9 @@
   //Essa é a rota para que o express redirecione o nosso arquivo index.html
   app.get('/', function(req, res, next){  
     res.sendFile(__dirname + '/index.html');
+  });
+  app.get('/'+disconnect, function(req, res, next){  
+    res.sendFile(__dirname + '/'+disconnect+'.html');
   });
 
 //FUNÇÕES DO SOCKET.IO ====================
@@ -70,12 +75,25 @@
           room[user['room']][user['map']].character[me]['who'] = '#'+room[user['room']][user['map']].character[me]['name'];
           room[user['room']][user['map']].character[me]['item'] = {};
           //items
-            room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
-            room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
-          socket.emit('start',{
-            user:me,
-            character:room[user['room']][user['map']].character
-          });
+            user['selection'] = "SELECT MC_USER_STYLE.skin, MC_USER_STYLE.head, MC_USER_STYLE.hair, MC_USER_STYLE.face, MC_USER_STYLE.beard, MC_USER_STYLE.neck, MC_USER_STYLE.upperBody, MC_USER_STYLE.torso, MC_USER_STYLE.leftHand, MC_USER_STYLE.rightHand, MC_USER_STYLE.legs, MC_USER_STYLE.feet FROM MC_USER_STYLE WHERE MC_USER_STYLE.user = '"+user['id']+"' LIMIT 1";
+            connection.query(user['selection'], function (error, results, fields) {
+             if (error) {
+                throw error;
+              } else {
+                if(results!=''){
+                  //items
+                    for (var item in results[0]) {
+                      if(item!='id'&&item!='user'&&results[0][item]!=''){
+                        room[user['room']][user['map']].character[me]['item'][item] = results[0][item];
+                      }
+                    }
+                  socket.emit('start',{
+                    user:me,
+                    character:room[user['room']][user['map']].character
+                  });
+                } else {}
+              }
+            });
       }
     });
     socket.on('login', function(login){
@@ -95,7 +113,6 @@
           throw error;
         } else {
           if(results!=''){
-            console.log(results[0]);
             user['logged'] = false;
             if(typeof(logged[results[0]['user']])!=="undefined"&&logged[results[0]['user']]!==null){
               user['logged'] = true;
@@ -118,7 +135,6 @@
                 }
                 // room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
                 // room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
-              console.log('start');
               socket.emit('start',{
                 user:me,
                 character:room[user['room']][user['map']].character
@@ -179,6 +195,7 @@
         socket.leave(user['room']+'-'+user['map']);
         delete room[user['room']][user['map']].character[user['name']];
         delete logged[user['name']];
+        socket.emit('disconnect',disconnect);
       }
     });
   });
