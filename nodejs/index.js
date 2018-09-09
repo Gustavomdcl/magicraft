@@ -43,14 +43,6 @@
       room[rooms[i]][maps[j]].character = {};
     }
   }
-    //teste
-      /*room[user['room']][user['map']].character['sapo'] = {};
-      room[user['room']][user['map']].character['sapo']['name'] = 'odd_gus';
-      room[user['room']][user['map']].character['sapo']['who'] = '#'+room[user['room']][user['map']].character['sapo']['name'];
-      room[user['room']][user['map']].character['sapo']['column'] = 7;
-      room[user['room']][user['map']].character['sapo']['row'] = 4;
-      room[user['room']][user['map']].character['sapo']['item'] = {};*/
-    //teste
   io.on('connection', function(socket){
     var user = {};
     user['room'] = rooms[0];
@@ -89,12 +81,21 @@
     socket.on('login', function(login){
       user['email'] = login['email'];
       user['password'] = md5(login['password']);
-      user['selection'] = "SELECT `id`,`user` FROM `MC_USER` WHERE `email` = '"+user['email']+"' AND `password` = '"+user['password']+"' LIMIT 1";
+        /*user['selection'] = "SELECT `id`,`user` FROM `MC_USER` WHERE `email` = '"+user['email']+"' AND `password` = '"+user['password']+"' LIMIT 1";
+        user['selection'] = "SELECT 'MC_USER.id' AS `id`,'MC_USER.user' AS `user`,
+        'MC_USER_STYLE.skin' AS `skin`,'MC_USER_STYLE.head' AS `head`,'MC_USER_STYLE.hair' AS `hair`,'MC_USER_STYLE.face' AS `face`,'MC_USER_STYLE.beard' AS `beard`,'MC_USER_STYLE.neck' AS `neck`,'MC_USER_STYLE.upper-body' AS `upper-body`,'MC_USER_STYLE.torso' AS `torso`,'MC_USER_STYLE.left-hand' AS `left-hand`,'MC_USER_STYLE.right-hand' AS `right-hand`,'MC_USER_STYLE.legs' AS `legs`,'MC_USER_STYLE.feet' AS `feet`
+        FROM `MC_USER`
+        JOIN `MC_USER_STYLE` ON 'MC_USER_STYLE.user' = 'MC_USER.id'
+        WHERE `MC_USER.email` = '"+user['email']+"' AND `MC_USER.password` = '"+user['password']+"' LIMIT 1";
+        user['selection'] = "SELECT MC_USER.* FROM MC_USER WHERE MC_USER.email = '"+user['email']+"' AND MC_USER.password = '"+user['password']+"' LIMIT 1";
+        user['selection'] = "SELECT MC_USER.*, MC_USER_STYLE.* FROM MC_USER JOIN MC_USER_STYLE ON MC_USER.id = MC_USER_STYLE.user WHERE MC_USER.email = '"+user['email']+"' AND MC_USER.password = '"+user['password']+"' LIMIT 1";*/
+      user['selection'] = "SELECT MC_USER.id, MC_USER.user, MC_USER_STYLE.skin, MC_USER_STYLE.head, MC_USER_STYLE.hair, MC_USER_STYLE.face, MC_USER_STYLE.beard, MC_USER_STYLE.neck, MC_USER_STYLE.upperBody, MC_USER_STYLE.torso, MC_USER_STYLE.leftHand, MC_USER_STYLE.rightHand, MC_USER_STYLE.legs, MC_USER_STYLE.feet FROM MC_USER JOIN MC_USER_STYLE ON MC_USER.id = MC_USER_STYLE.user WHERE MC_USER.email = '"+user['email']+"' AND MC_USER.password = '"+user['password']+"' LIMIT 1";
       connection.query(user['selection'], function (error, results, fields) {
        if (error) {
           throw error;
         } else {
           if(results!=''){
+            console.log(results[0]);
             user['logged'] = false;
             if(typeof(logged[results[0]['user']])!=="undefined"&&logged[results[0]['user']]!==null){
               user['logged'] = true;
@@ -110,8 +111,14 @@
               room[user['room']][user['map']].character[me]['who'] = '#'+room[user['room']][user['map']].character[me]['name'];
               room[user['room']][user['map']].character[me]['item'] = {};
               //items
-                room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
-                room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
+                for (var item in results[0]) {
+                  if(item!='id'&&item!='user'&&results[0][item]!=''){
+                    room[user['room']][user['map']].character[me]['item'][item] = results[0][item];
+                  }
+                }
+                // room[user['room']][user['map']].character[me]['item']['upper-body'] = 'cloak';
+                // room[user['room']][user['map']].character[me]['item']['hair'] = 'chanel';
+              console.log('start');
               socket.emit('start',{
                 user:me,
                 character:room[user['room']][user['map']].character
