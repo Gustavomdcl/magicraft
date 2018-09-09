@@ -152,6 +152,12 @@ $block: 84;
 		position: absolute;
 		background-color: transparent;
 		background-image: url('../img/apparate.png');
+		&.leftHand{
+			z-index:12;
+		}
+		&.rightHand{
+			z-index:12;
+		}
 		&.head{
 			z-index:11;
 		}
@@ -173,12 +179,6 @@ $block: 84;
 		&.torso{
 			z-index:5;
 		}
-		&.leftHand{
-			z-index:4;
-		}
-		&.rightHand{
-			z-index:3;
-		}
 		&.legs{
 			z-index:2;
 		}
@@ -187,6 +187,12 @@ $block: 84;
 		}
 	}
 
+
+/* ==== handRight ==== */
+
+	.wand_right {
+		background-image: url('../img/wand_right.png');
+	}
 
 /* ==== HAIR ==== */
 

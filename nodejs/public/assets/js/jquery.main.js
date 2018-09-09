@@ -33,6 +33,10 @@ desconectar automático - arrumar
 	var me;
 	var character = {};
 
+	socket.on('disconnect', function(disconnect){
+		window.location.replace('/disconnect');
+	});
+
 	/* ==== LOADING ==== */
 		$(document).ready(function(e){
 			setTimeout(function(){
@@ -129,9 +133,6 @@ desconectar automático - arrumar
 				$('#'+user).remove();
 				delete character[user];
 			});
-			socket.on('disconnect', function(disconnect){
-				window.location.replace('/disconnect');
-			});
 			socket.on('right', function(data){
 				Action_CharacterMovement(character[data['user']]['who'],'right','+',3);
 			});
@@ -203,6 +204,7 @@ desconectar automático - arrumar
 					grid['width'] = grid['column']*config['block']['size'];
 					grid['height'] = grid['row']*config['block']['size'];
 				grid['element'].width(grid['column']*config['block']['size']).height(grid['row']*config['block']['size']);
+				$('body').css('background',grid['element'].attr('body'));
 				var i;
 				for (i = 1; i <= grid['column']; i++) { 
 					grid['structure'][i] = new Array();
