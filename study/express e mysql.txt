@@ -1,0 +1,43 @@
+mysql express
+
+https://www.w3schools.com/nodejs/nodejs_mysql.asp
+https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
+
+https://stackoverflow.com/questions/35184129/how-to-obtain-the-value-of-the-result-in-a-node-mysql-query
+
+-> https://www.quora.com/How-do-I-pass-a-user-entered-form-value-from-HTML-to-Node-js
+
+LEGAL:
+https://stackoverflow.com/questions/36556320/express-js-how-to-post-data-to-html-using-an-input-value-equal-to-the-foreign-k
+	MUSTACHE
+		https://www.npmjs.com/package/mustache
+
+TUTORIAL:
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/forms
+
+Importante:
+http://expressjs.com/pt-br/guide/routing.html
+
+EMAIL:
+https://www.npmjs.com/package/express-mailer
+
+https://www.codementor.io/joshuaaroke/sending-html-message-in-nodejs-express-9i3d3uhjr
+
+-> https://imasters.com.br/front-end/enviando-e-mail-usando-node-js
+	https://nodemailer.com/about/ (YAY)
+	Tutorial show (tem tudo):
+	https://appdividend.com/2017/08/11/send-email-in-node-js/
+
+
+LOGIN REGISTRATION - 
+https://www.youtube.com/watch?v=CrAU8xTHy4M
+
+HOSPEDAGEM - 
+
+https://uolhost.uol.com.br/hospedagem-de-sites/linguagem-programacao/nodejs.html#rmcl
+
+https://king.host/node-js?gclid=EAIaIQobChMImKT3gvG83QIVDQqRCh0SeA-TEAAYAyAAEgJNiPD_BwE
+
+https://www.umbler.com/br/hospedagem-nodejs?utm_source=google&utm_medium=cpc&utm_term=node%20js%20server&utm_campaign=br+infra+p&gclid=EAIaIQobChMIqaP97O-83QIVkIeRCh3OFgPGEAAYAyAAEgJIEvD_BwE
+
+https://hostadvice.com/lp/hosting-services/nodejs/?creative=248295515939&targetid=kwd-300323112143&matchtype=e&device=c&campaignid=837511083&adgroupid=43189810016&feeditemid=&loc_physical_ms=1001773&loc_interest_ms=&network=g&devicemodel=&placement=&keyword=node%20js%20server%20hosting&target=&aceid=&adposition=1t1&gclid=EAIaIQobChMIqaP97O-83QIVkIeRCh3OFgPGEAAYASAAEgIPt_D_BwE

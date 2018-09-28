@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+	<head>
+		<meta charset="utf-8">
+		<title>ejs</title>
+	</head>
+	<body class="no-js">
+		<% users.forEach(function(user,i){ %>
+			<span><%= user %> (<%= i %>)</span>
+		<% }); %>
+	</body>
+</html>
