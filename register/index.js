@@ -89,7 +89,7 @@
 
 //EXPRESS ====================
 	app.set('view engine','ejs');
-	app.use(express.static(__dirname + '/public'));
+	app.use(express.static('public'));
 
 	//FUNÇÕES PARA POST
 		app.use(bodyParser.urlencoded({extended: true}));
@@ -100,16 +100,20 @@
 		});
 
 		app.post('/register/', function(req, res){
+			app.use('/register', express.static('public'));
 			var registration = req.body;
+			//https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
 			var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
 			connection.query(insert, function (err, result) {
 				if (err) throw err;
 				console.log("1 record inserted");
+				console.log(result.insertId);
 			});
 			res.render('login');
 		});
 
 		app.get('/blob/', function(req, res){
+			app.use('/blob', express.static('public'));
 			res.render('login');
 		});
 
