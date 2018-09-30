@@ -85,7 +85,7 @@ $block: 84;
 	.character {
 		width: $block+px;
 		height: $block+px;
-		background-image: url('../img/character.png');
+		//background-image: url('../img/character.png');
 		position: absolute;
 		z-index: 2;
 	}
@@ -151,7 +151,7 @@ $block: 84;
 		height: $block+px;
 		position: absolute;
 		background-color: transparent;
-		background-image: url('../img/apparate.png');
+		//background-image: url('../img/apparate.png');
 		&.leftHand{
 			z-index:12;
 		}
@@ -187,6 +187,27 @@ $block: 84;
 		}
 	}
 
+
+/* ==== SKIN ==== */
+
+	.bone {
+		background-image: url('../img/bone.png');
+	}
+	.blood {
+		background-image: url('../img/blood.png');
+	}
+	.sand {
+		background-image: url('../img/sand.png');
+	}
+	.almond {
+		background-image: url('../img/almond.png');
+	}
+	.pupil {
+		background-image: url('../img/pupil.png');
+	}
+	.coffee {
+		background-image: url('../img/coffee.png');
+	}
 
 /* ==== handRight ==== */
 

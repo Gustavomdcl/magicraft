@@ -34,36 +34,40 @@
 
 <body class="no-js">
 
+	<%- include('header'); -%>
+
 	<div id="site">
-		<p>
-			<% users.forEach(function(user,i){ %>
-				<span><%= user %> (<%= i %>)</span>
-			<% }); %>
-		</p>
 		<div class="container row">
 			<form class="col6" action="/play/" method="post">
-				<label for="email">Email:</label>
-				<input autocomplete="off" type="email" name="email" placeholder="Email"><br>
-
-				<label for="password">Senha:</label>
-				<input autocomplete="off" type="password" name="password" placeholder="Senha"><br>
-
+				<div class="field">
+					<label for="email">Email:</label>
+					<input autocomplete="off" type="email" name="email" placeholder="Email">
+				</div><!-- .field -->
+				<div class="field">
+					<label for="password">Senha:</label>
+					<input autocomplete="off" type="password" name="password" placeholder="Senha">
+				</div><!-- .field -->
 				<button type="submit">Acessar</button>
 			</form>
 			<form class="col6" action="/register/" method="post">
-				<label for="to">To:</label>
-				<input type="email" name="to">
-
-				<label for="subject">Subject:</label>
-				<input type="text" name="subject">
-
-				<label for="body">Body:</label>
-				<textarea cols="5" rows="5" name="body"></textarea>
-
-				<button type="submit" class="btn btn-success">Send</button>
+				<div class="field">
+					<label for="user">Apelido:</label>
+					<input autocomplete="off" type="user" name="user" placeholder="Apelido">
+				</div><!-- .field -->
+				<div class="field">
+					<label for="email">Email:</label>
+					<input autocomplete="off" type="email" name="email" placeholder="Email">
+				</div><!-- .field -->
+				<div class="field">
+					<label for="password">Senha:</label>
+					<input autocomplete="off" type="password" name="password" placeholder="Senha">
+				</div><!-- .field -->
+				<button type="submit">Cadastrar</button>
 			</form>
 		</div><!-- .container -->
 	</div><!-- #site -->
+
+	<%- include('footer'); -%>
 
 	<!-- javascript
 	======================================================== -->

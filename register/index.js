@@ -89,15 +89,28 @@
 
 //EXPRESS ====================
 	app.set('view engine','ejs');
-	app.use(express.static('public'));
+	app.use(express.static(__dirname + '/public'));
 
 	//FUNÇÕES PARA POST
 		app.use(bodyParser.urlencoded({extended: true}));
 		app.use(bodyParser.json());
 
 		app.get('/', function(req, res){
-			var users = ['Gustavo', 'Marcelo', 'Thiago'];
-			res.render('login',{users: users});
+			res.render('login');
+		});
+
+		app.post('/register/', function(req, res){
+			var registration = req.body;
+			var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
+			connection.query(insert, function (err, result) {
+				if (err) throw err;
+				console.log("1 record inserted");
+			});
+			res.render('login');
+		});
+
+		app.get('/blob/', function(req, res){
+			res.render('login');
 		});
 
 //REDIRECIONAMENTO DA ROTA DO EXPRESS ====================

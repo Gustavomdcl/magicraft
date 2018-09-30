@@ -15,6 +15,15 @@ desconectar automático - arrumar
 		right-hand - 
 		legs - 
 		feet - 
+
+	Skins
+		Bone - White
+		Blood - Vermelho
+		Sand - Yellow
+		Almond - Brown
+		Chocolate - Dark Brown
+		Coffee - Black
+		Invisible
 */
 
 // SETUP ---------------------------------
