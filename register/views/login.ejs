@@ -51,6 +51,14 @@
 			</form>
 			<form class="col6" action="/register/" method="post">
 				<div class="field">
+					Pele: 
+					<% skins.forEach(function(skin){ %>
+						<label for="<%= skin.slug %>">
+							<input type="radio" name="skin" value="<%= skin.slug %>" id="<%= skin.slug %>"> <%= skin.name %>
+						</label>
+					<% }); %>
+				</div><!-- .field -->
+				<div class="field">
 					<label for="user">Apelido:</label>
 					<input autocomplete="off" type="user" name="user" placeholder="Apelido">
 				</div><!-- .field -->

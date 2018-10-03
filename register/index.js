@@ -46,6 +46,39 @@
 			price		: "VARCHAR(255)"
 		}
 	};
+	var FILL = {
+		MC_USER: {
+			fill		: false
+		},
+		MC_USER_STYLE: {
+			fill		: false
+		},
+		MC_STYLES: {
+			fill		: true,
+			fields		: "(category, name, slug, price)",
+			values		: [
+				//Skin
+					['skin','Osso','bone',0],
+					['skin','Sangue','blood',0],
+					['skin','Areia','sand',0],
+					['skin','Amêndoa','almond',0],
+					['skin','Chocolate','chocolate',0],
+					['skin','Café','coffee',0],
+				//Hair
+					['hair','Cabelo Chanel Preto','chanel_black',0],
+					['hair','Cabelo Longo Marrom','long_brown',0],
+				//Face
+					['face','Óculos Quadrado','squared_glasses',0],
+				//Beard 
+					['beard','Barba Curta','thin',0],
+				//Upper Body
+					['upperBody','Capa Sonserina','cloak_s',0],
+					['upperBody','Cabelo Capa Grifinória','cloak_g',0],
+				//Hand Right
+					['handRight','Varinha Simples','wand_right',0]
+			]
+		}
+	};
 	var TABLE_COUNT = [];
 	for(var TABLE in DATABASE){
 		TABLE_COUNT.push(TABLE);
@@ -75,41 +108,45 @@
 				connection.query(sql, function (error, result){
 					if (error) throw error;
 					console.log("Table created");
+					if(FILL[TABLE]['fill']==true){
+						var FillMYSQL = "INSERT INTO "+TABLE+" "+FILL[TABLE]['fields']+" VALUES ?";
+						connection.query(FillMYSQL, [FILL[TABLE]['values']], function (err, result) {
+							if (err) throw err;
+							console.log("Number of records inserted: " + result.affectedRows);
+						});
+					}
 					if((e++)!=(TABLE_COUNT.length-1)){
 						TABLE_CREATION(e++);
+					} else {
+						GET_BASIC();
 					}
 				});
 			} else {
 				if((e++)!=(TABLE_COUNT.length-1)){
 					TABLE_CREATION(e++);
+				} else {
+					GET_BASIC();
 				}
 			}
 		});
 	}
 
-//FILL MYSQL ====================
-
-	var sql = "INSERT INTO customers (name, address) VALUES ?";
-	var values = [
-		['John', 'Highway 71'],
-		['Peter', 'Lowstreet 4'],
-		['Amy', 'Apple st 652'],
-		['Hannah', 'Mountain 21'],
-		['Michael', 'Valley 345'],
-		['Sandy', 'Ocean blvd 2'],
-		['Betty', 'Green Grass 1'],
-		['Richard', 'Sky st 331'],
-		['Susan', 'One way 98'],
-		['Vicky', 'Yellow Garden 2'],
-		['Ben', 'Park Lane 38'],
-		['William', 'Central st 954'],
-		['Chuck', 'Main Road 989'],
-		['Viola', 'Sideway 1633']
-	];
-	con.query(sql, [values], function (err, result) {
-		if (err) throw err;
-		console.log("Number of records inserted: " + result.affectedRows);
-	});
+	var basic = {};
+	function GET_BASIC(){
+		basic['skins'] = [];
+		basic['skin_selection'] = "SELECT `slug`, `name` FROM `MC_STYLES` WHERE `category` = 'skin'";
+		connection.query(basic['skin_selection'], function (error, results, fields) {
+			if (error) {
+				throw error;
+			} else {
+				if(results!=''){
+					for (var i = 0; i < results.length; i++) {
+						basic['skins'].push({name:results[i].name,slug:results[i].slug});
+					}
+				} else {}
+			}
+		});
+	}
 
 //EXPRESS ====================
 	app.set('view engine','ejs');
@@ -120,7 +157,7 @@
 		app.use(bodyParser.json());
 
 		app.get('/', function(req, res){
-			res.render('login');
+			res.render('login',{skins:basic['skins']});
 		});
 
 		app.post('/register/', function(req, res){
@@ -130,15 +167,19 @@
 			var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
 			connection.query(insert, function (err, result) {
 				if (err) throw err;
-				console.log("1 record inserted");
-				console.log(result.insertId);
+				var insertStyle = "INSERT INTO MC_USER_STYLE (user, skin) VALUES ('"+result.insertId+"', '"+registration['skin']+"')";
+				connection.query(insertStyle, function (err, resultStyle) {
+					if (err) throw err;
+					console.log("1 record inserted");
+					console.log(result.insertId);
+				});
 			});
-			res.render('login');
+			res.render('login',{skins:basic['skins']});
 		});
 
 		app.get('/blob/', function(req, res){
 			app.use('/blob', express.static('public'));
-			res.render('login');
+			res.render('login',{skins:basic['skins']});
 		});
 
 //REDIRECIONAMENTO DA ROTA DO EXPRESS ====================
