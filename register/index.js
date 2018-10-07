@@ -163,18 +163,29 @@
 		app.post('/register/', function(req, res){
 			app.use('/register', express.static('public'));
 			var registration = req.body;
-			//https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
-			var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
-			connection.query(insert, function (err, result) {
-				if (err) throw err;
-				var insertStyle = "INSERT INTO MC_USER_STYLE (user, skin) VALUES ('"+result.insertId+"', '"+registration['skin']+"')";
-				connection.query(insertStyle, function (err, resultStyle) {
-					if (err) throw err;
-					console.log("1 record inserted");
-					console.log(result.insertId);
-				});
-			});
-			res.render('login',{skins:basic['skins']});
+			var emailExists = "SELECT count(*) FROM MC_USER WHERE email = '"+registration['email']+"'";
+            connection.query(emailExists, function (error, results, fields) {
+				if (error) {
+					throw error;
+				} else {
+					if(results[0]['count(*)']==0){
+						//https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
+						var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
+						connection.query(insert, function (err, result) {
+							if (err) throw err;
+							var insertStyle = "INSERT INTO MC_USER_STYLE (user, skin) VALUES ('"+result.insertId+"', '"+registration['skin']+"')";
+							connection.query(insertStyle, function (err, resultStyle) {
+								if (err) throw err;
+								console.log("1 record inserted");
+								console.log(result.insertId);
+							});
+						});
+						res.render('login',{skins:basic['skins'],sucess:registration['email']});
+					} else {
+						res.render('login',{skins:basic['skins'],email_exists:true,email:registration['email'],user:registration['user']});
+					}
+				}
+            });
 		});
 
 		app.get('/blob/', function(req, res){
