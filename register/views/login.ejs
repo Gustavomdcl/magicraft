@@ -57,6 +57,64 @@
 							<input type="radio" name="skin" value="<%= skin.slug %>" id="<%= skin.slug %>"> <%= skin.name %>
 						</label>
 					<% }); %>
+					<label for="none-skin">
+						<input type="radio" name="skin" id="none-skin" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Cabelo: 
+					<% hairs.forEach(function(hair){ %>
+						<label for="<%= hair.slug %>">
+							<input type="radio" name="hair" value="<%= hair.slug %>" id="<%= hair.slug %>"> <%= hair.name %>
+						</label>
+					<% }); %>
+					<label for="none-hair">
+						<input type="radio" name="hair" id="none-hair" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Face: 
+					<% faces.forEach(function(face){ %>
+						<label for="<%= face.slug %>">
+							<input type="radio" name="face" value="<%= face.slug %>" id="<%= face.slug %>"> <%= face.name %>
+						</label>
+					<% }); %>
+					<label for="none-face">
+						<input type="radio" name="face" id="none-face" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Barba: 
+					<% beards.forEach(function(beard){ %>
+						<label for="<%= beard.slug %>">
+							<input type="radio" name="beard" value="<%= beard.slug %>" id="<%= beard.slug %>"> <%= beard.name %>
+						</label>
+					<% }); %>
+					<label for="none-beard">
+						<input type="radio" name="beard" id="none-beard" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Ombros: 
+					<% upperBodys.forEach(function(upperBody){ %>
+						<label for="<%= upperBody.slug %>">
+							<input type="radio" name="upperBody" value="<%= upperBody.slug %>" id="<%= upperBody.slug %>"> <%= upperBody.name %>
+						</label>
+					<% }); %>
+					<label for="none-upperBody">
+						<input type="radio" name="upperBody" id="none-upperBody" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Mão Direita: 
+					<% rightHands.forEach(function(rightHand){ %>
+						<label for="<%= rightHand.slug %>">
+							<input type="radio" name="rightHand" value="<%= rightHand.slug %>" id="<%= rightHand.slug %>"> <%= rightHand.name %>
+						</label>
+					<% }); %>
+					<label for="none-rightHand">
+						<input type="radio" name="rightHand" id="none-rightHand" value=""> Nenhum
+					</label><br><br>
 				</div><!-- .field -->
 				<div class="field">
 					<label for="user">Apelido:</label>

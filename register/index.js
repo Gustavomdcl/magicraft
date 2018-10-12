@@ -75,7 +75,7 @@
 					['upperBody','Capa Sonserina','cloak_s',0],
 					['upperBody','Cabelo Capa Grifinória','cloak_g',0],
 				//Hand Right
-					['handRight','Varinha Simples','wand_right',0]
+					['rightHand','Varinha Simples','wand_right',0]
 			]
 		}
 	};
@@ -134,7 +134,12 @@
 	var basic = {};
 	function GET_BASIC(){
 		basic['skins'] = [];
-		basic['skin_selection'] = "SELECT `slug`, `name` FROM `MC_STYLES` WHERE `category` = 'skin'";
+		basic['hairs'] = [];
+		basic['faces'] = [];
+		basic['beards'] = [];
+		basic['upperBodys'] = [];
+		basic['rightHands'] = [];
+		/*basic['skin_selection'] = "SELECT `slug`, `name` FROM `MC_STYLES` WHERE `category` = 'skin'";
 		connection.query(basic['skin_selection'], function (error, results, fields) {
 			if (error) {
 				throw error;
@@ -145,7 +150,10 @@
 					}
 				} else {}
 			}
-		});
+		});*/
+		for (var i = 0; i < FILL['MC_STYLES']['values'].length; i++) {
+			basic[FILL['MC_STYLES']['values'][i][0]+'s'].push({name:FILL['MC_STYLES']['values'][i][1],slug:FILL['MC_STYLES']['values'][i][2]});
+		}
 	}
 
 //EXPRESS ====================
@@ -157,7 +165,14 @@
 		app.use(bodyParser.json());
 
 		app.get('/', function(req, res){
-			res.render('login',{skins:basic['skins']});
+			res.render('login',{
+				skins:basic['skins'],
+				hairs:basic['hairs'],
+				faces:basic['faces'],
+				beards:basic['beards'],
+				upperBodys:basic['upperBodys'],
+				rightHands:basic['rightHands']
+			});
 		});
 
 		app.post('/register/', function(req, res){
@@ -173,24 +188,27 @@
 						var insert = "INSERT INTO MC_USER (user, email, password, verify) VALUES ('"+registration['user']+"', '"+registration['email']+"', '"+md5(registration['password'])+"', '"+md5(registration['password'])+"')";
 						connection.query(insert, function (err, result) {
 							if (err) throw err;
-							var insertStyle = "INSERT INTO MC_USER_STYLE (user, skin) VALUES ('"+result.insertId+"', '"+registration['skin']+"')";
+							var insertStyle = "INSERT INTO MC_USER_STYLE (user, skin, head, hair, face, beard, neck, upperBody, torso, leftHand, rightHand, legs, feet) VALUES ('"+result.insertId+"', '"+registration['skin']+"', '"+registration['head']+"', '"+registration['hair']+"', '"+registration['face']+"', '"+registration['beard']+"', '"+registration['neck']+"', '"+registration['upperBody']+"', '"+registration['torso']+"', '"+registration['leftHand']+"', '"+registration['rightHand']+"', '"+registration['legs']+"', '"+registration['feet']+"')";
 							connection.query(insertStyle, function (err, resultStyle) {
 								if (err) throw err;
 								console.log("1 record inserted");
 								console.log(result.insertId);
 							});
 						});
-						res.render('login',{skins:basic['skins'],sucess:registration['email']});
+						res.render('register',{
+							sucess:true,
+							email:registration['email'],
+							user:registration['user']
+						});
 					} else {
-						res.render('login',{skins:basic['skins'],email_exists:true,email:registration['email'],user:registration['user']});
+						res.render('register',{
+							sucess:'email exists',
+							email:registration['email'],
+							user:registration['user']
+						});
 					}
 				}
             });
-		});
-
-		app.get('/blob/', function(req, res){
-			app.use('/blob', express.static('public'));
-			res.render('login',{skins:basic['skins']});
 		});
 
 //REDIRECIONAMENTO DA ROTA DO EXPRESS ====================
