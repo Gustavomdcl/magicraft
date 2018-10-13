@@ -39,14 +39,16 @@
 	<div id="site">
 		<div class="container row">
 			<div class="message">
-				<% if(sucess==true){ %>
-					<h2>Sucesso!</h2>
-					<p>Seu cadastro foi realizado com sucesso!</p>
-					<p>Acesse seu email <%= email %> para validar a sua conta <%= user %>.</p>
-					<p>Não recebeu o seu email? Procure na sua caixa de SPAM ou <a href="../validation/?send_email=<%= email %>">clique aqui</a> para receber novamente.</p>
-				<% } if(sucess=='email exists'){ %>
-					<h2>Email existe...</h2>
-					<p>Seu cadastro não foi realizado pois o email <%= email %> já foi cadastrado. <a href="../?email=<%= email %>&user=<%= user %>">Cadastre novamente.</p>
+				<% if(process=='send_mail'){ %>
+					<h2>Email Enviado.</h2>
+					<p>Enviamos um email para a sua conta <%= send_email %> com um link de validação.</p>
+					<p>Acesse seu email <%= send_email %> para validar a sua conta.</p>
+					<p>Não recebeu o seu email? Procure na sua caixa de SPAM ou <a href="../validation/?send_email=<%= send_email %>">clique aqui</a> para receber novamente.</p>
+				<% } %>
+				<% if(process==true){ %>
+					<h2>Conta validada!</h2>
+					<p>Você acabou de validar a sua conta.</p>
+					<p><a href="../">Clique aqui</a> para fazer login e começar a jogar!</p>
 				<% } %>
 			</div><!-- .message -->
 		</div><!-- .container -->

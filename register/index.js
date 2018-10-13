@@ -160,10 +160,10 @@
 	app.set('view engine','ejs');
 	app.use(express.static('public'));
 
-	//FUNÇÕES PARA POST
-		app.use(bodyParser.urlencoded({extended: true}));
-		app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({extended: true}));
+	app.use(bodyParser.json());
 
+	//FUNÇÃO PRINCIPAL
 		app.get('/', function(req, res){
 			res.render('login',{
 				skins:basic['skins'],
@@ -171,10 +171,86 @@
 				faces:basic['faces'],
 				beards:basic['beards'],
 				upperBodys:basic['upperBodys'],
-				rightHands:basic['rightHands']
+				rightHands:basic['rightHands'],
+
+				logemail:req.query['logemail'],
+
+				email:req.query['email'],
+				user:req.query['user']
 			});
 		});
 
+	//FUNÇÕES DE PLAY
+		app.post('/play/', function(req, res){
+			app.use('/play', express.static('public'));
+			var logdata = req.body;
+			var user_verify = "SELECT MC_USER.id, MC_USER.user, MC_USER.verify, MC_USER_STYLE.skin, MC_USER_STYLE.head, MC_USER_STYLE.hair, MC_USER_STYLE.face, MC_USER_STYLE.beard, MC_USER_STYLE.neck, MC_USER_STYLE.upperBody, MC_USER_STYLE.torso, MC_USER_STYLE.leftHand, MC_USER_STYLE.rightHand, MC_USER_STYLE.legs, MC_USER_STYLE.feet FROM MC_USER JOIN MC_USER_STYLE ON MC_USER.id = MC_USER_STYLE.user WHERE MC_USER.email = '"+logdata['email']+"' AND MC_USER.password = '"+md5(logdata['password'])+"' LIMIT 1";
+			connection.query(user_verify, function (error, results, fields) {
+				if (error) {
+					throw error;
+				} else {
+					if(results!=''){
+						if(results[0]['verify']!='true'){
+							res.render('logfail',{
+								error:'validate false',
+								email:logdata['email']
+							});
+						} else {
+							//JOGOOOO AND MAGIC!!!! WOW.
+						}
+					} else {
+						res.render('logfail',{
+							error:'email password fail',
+							email:logdata['email']
+						});
+					}
+				}
+			});
+		});
+		
+		app.get('/disconnect', function(req, res, next){  
+			res.sendFile(__dirname + '/disconnect.html');
+		});
+
+	//FUNÇÕES PARA VALIDATE
+		app.get('/validation/', function(req, res){
+			app.use('/validation', express.static('public'));
+			if(req.query['send_email']==undefined){
+				if(req.query['validate_email']==undefined||req.query['validate_verify']==undefined){
+					res.render('404');
+				} else {
+					var user_verify = "SELECT MC_USER.id FROM MC_USER WHERE MC_USER.email = '"+req.query['validate_email']+"' AND MC_USER.verify = '"+req.query['validate_verify']+"' LIMIT 1";
+					connection.query(user_verify, function (error, results, fields) {
+						if (error) {
+							throw error;
+						} else {
+							if(results!=''){
+								//ENVIAR EMAIL!!
+								var sql = "UPDATE MC_USER SET MC_USER.verify = 'true' WHERE MC_USER.id = '"+results[0]['id']+"'";
+								connection.query(sql, function (err, result) {
+									if (err) throw err;
+									console.log(result.affectedRows + " record(s) updated");
+									res.render('validation',{
+										process:true,
+										send_email:req.query['validate_email']
+									});
+								});
+							} else {
+								res.render('404');
+							}
+						}
+					});
+				}
+			} else {
+				//ENVIAR EMAIL!!
+				res.render('validation',{
+					process:'send_mail',
+					send_email:req.query['send_email']
+				});
+			}
+		});
+
+	//FUNÇÕES PARA CADASTRO
 		app.post('/register/', function(req, res){
 			app.use('/register', express.static('public'));
 			var registration = req.body;
@@ -195,6 +271,7 @@
 								console.log(result.insertId);
 							});
 						});
+						//ENVIAR EMAIL!!
 						res.render('register',{
 							sucess:true,
 							email:registration['email'],
@@ -209,6 +286,17 @@
 					}
 				}
             });
+		});
+
+	//FUNÇÕES 404
+		app.get('/register/', function(req, res){
+			app.use('/register', express.static('public'));
+			res.render('404');
+		});
+
+		app.get('/play/', function(req, res){
+			app.use('/play', express.static('public'));
+			res.render('404');
 		});
 
 //REDIRECIONAMENTO DA ROTA DO EXPRESS ====================

@@ -1,0 +1,7 @@
+https://www.slant.co/options/184/alternatives/~ejs-alternatives
+
+https://github.com/janl/mustache.js/
+
+https://tableless.com.br/templates-client-side-com-mustache-js/
+
+https://www.npmjs.com/package/mustache

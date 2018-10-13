@@ -123,6 +123,11 @@ app.get('/', function(req, res){
 	res.render('login',{users: users});
 });
 
+app.get('/mustache/', function(req, res){  
+  console.log(req.query);
+  res.sendFile(__dirname + '/methodPost.html');
+});
+
 //REDIRECIONAMENTO DA ROTA DO EXPRESS ====================
 http.listen(3000, function(){  
   console.log('servidor rodando em localhost:3000');
