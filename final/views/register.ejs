@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+
+	<meta charset="utf-8">
+
+	<title>MagiCraft</title>
+
+	<!-- description http://conversion.com.br rel="nofollow" on links
+	======================================================== -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="robots" content="NOINDEX, nofollow" />	
+	<meta name="title" content="MagiCraft">
+	<meta name="description" content="MagiCraft">
+	<meta name="author" content="Pinpinhos">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="cleartype" content="on">
+
+	<!-- styles
+	======================================================== -->
+	<!-- Main Style -->
+	<link rel="stylesheet" href="backend/css/main.css">
+	<!-- Adjust Style -->
+	<link rel="stylesheet" href="backend/css/adjust.css">
+	<!-- Font FONTE | font-family: 'FONTE', sans-serif; 
+	<link href='http://google.com/fonts' rel='stylesheet' type='text/css'> -->
+	<!-- modernizr modernizr.com -->
+	<script src="backend/min/modernizr.min.js"></script>
+
+</head>
+
+<body class="no-js">
+
+	<%- include('header'); -%>
+
+	<div id="site">
+		<div class="container row">
+			<div class="message">
+				<% if(sucess==true){ %>
+					<h2>Sucesso!</h2>
+					<p>Seu cadastro foi realizado com sucesso!</p>
+					<p>Acesse seu email <%= email %> para validar a sua conta <%= user %>.</p>
+					<p>Não recebeu o seu email? Procure na sua caixa de SPAM ou <a href="../validation/?send_email=<%= email %>">clique aqui</a> para receber novamente.</p>
+				<% } if(sucess=='email exists'){ %>
+					<h2>Email existe...</h2>
+					<p>Seu cadastro não foi realizado pois o email <%= email %> já foi cadastrado. <a href="../?email=<%= email %>&user=<%= user %>">Cadastre novamente.</p>
+				<% } %>
+			</div><!-- .message -->
+		</div><!-- .container -->
+	</div><!-- #site -->
+
+	<%- include('footer'); -%>
+
+	<!-- javascript
+	======================================================== -->
+	<!-- jquery jquery.com -->
+	<script src="backend/min/jquery.min.js?v=1.11.0"></script>
+	<!-- suiting -->
+	<script src="backend/min/jquery.suiting.min.js"></script><!-- GRUNT http://blog.henriquesilverio.com/javascript-e-jquery/grunt-js-automatize-tarefas-e-otimize-o-seu-workflow/ -->
+	<!-- mobile -->
+	<script src="backend/min/jquery.mobile.min.js"></script><!-- GRUNT http://blog.henriquesilverio.com/javascript-e-jquery/grunt-js-automatize-tarefas-e-otimize-o-seu-workflow/ -->
+	<!-- main -->
+	<script src="backend/min/jquery.main.min.js"></script><!-- GRUNT http://blog.henriquesilverio.com/javascript-e-jquery/grunt-js-automatize-tarefas-e-otimize-o-seu-workflow/ -->
+
+</body>
+</html>
