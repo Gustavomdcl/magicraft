@@ -70,6 +70,7 @@
 				//Hair
 					['hair','Cabelo Chanel Preto','chanel_black',0],
 					['hair','Cabelo Longo Marrom','long_brown',0],
+					['hair','Cabelo Topete Loiro','blond_forelock',0],
 				//Face
 					['face','Óculos Quadrado','squared_glasses',0],
 				//Beard 
