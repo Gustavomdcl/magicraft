@@ -67,6 +67,7 @@
 					['skin','Café','coffee',0],
 				//Head
 					['head','Chapéu Pontudo','pointed_hat',0],
+					['head','Chapéu Fezes','poop_hat',0],
 				//Hair
 					['hair','Cabelo Chanel Preto','chanel_black',0],
 					['hair','Cabelo Longo Marrom','long_brown',0],
