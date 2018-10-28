@@ -70,6 +70,17 @@
 					</label><br><br>
 				</div><!-- .field -->
 				<div class="field">
+					Cabeça: 
+					<% heads.forEach(function(head){ %>
+						<label for="<%= head.slug %>">
+							<input type="radio" name="head" value="<%= head.slug %>" id="<%= head.slug %>"> <%= head.name %>
+						</label>
+					<% }); %>
+					<label for="none-head">
+						<input type="radio" name="head" id="none-head" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
 					Cabelo: 
 					<% hairs.forEach(function(hair){ %>
 						<label for="<%= hair.slug %>">
@@ -100,6 +111,17 @@
 					<% }); %>
 					<label for="none-beard">
 						<input type="radio" name="beard" id="none-beard" value=""> Nenhum
+					</label><br><br>
+				</div><!-- .field -->
+				<div class="field">
+					Pescoço: 
+					<% necks.forEach(function(neck){ %>
+						<label for="<%= neck.slug %>">
+							<input type="radio" name="neck" value="<%= neck.slug %>" id="<%= neck.slug %>"> <%= neck.name %>
+						</label>
+					<% }); %>
+					<label for="none-neck">
+						<input type="radio" name="neck" id="none-neck" value=""> Nenhum
 					</label><br><br>
 				</div><!-- .field -->
 				<div class="field">

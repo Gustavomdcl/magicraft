@@ -236,14 +236,37 @@ $block: 84;
 
 /* ==== BEARD ==== */
 
-	.thin {
-		background-image: url('../img/thin.png');
+	.thin_brown {
+		background-image: url('../img/thin_brown.png');
+	}
+
+	.thick_brown {
+		background-image: url('../img/thick_brown.png');
 	}
 
 /* ==== FACE ==== */
 
 	.squared_glasses {
 		background-image: url('../img/squared_glasses.png');
+	}
+
+	.circled_glasses {
+		background-image: url('../img/circled_glasses.png');
+	}
+
+/* ==== NECK ==== */
+
+	.tie_s {
+		background-image: url('../img/tie_s.png');
+	}
+	.tie_g {
+		background-image: url('../img/tie_g.png');
+	}
+	.tie_h {
+		background-image: url('../img/tie_h.png');
+	}
+	.tie_c {
+		background-image: url('../img/tie_c.png');
 	}
 
 /* ==== UPPER BODY ==== */
@@ -253,6 +276,12 @@ $block: 84;
 	}
 	.cloak_g {
 		background-image: url('../img/cloak_g.png');
+	}
+	.cloak_h {
+		background-image: url('../img/cloak_h.png');
+	}
+	.cloak_c {
+		background-image: url('../img/cloak_c.png');
 	}
 
 /* ==== POSITION ==== */

@@ -73,11 +73,20 @@
 					['hair','Cabelo Topete Loiro','blond_forelock',0],
 				//Face
 					['face','Óculos Quadrado','squared_glasses',0],
+					['face','Óculos Circular','circled_glasses',0],
 				//Beard 
-					['beard','Barba Curta','thin',0],
+					['beard','Barba Curta Marrom','thin_brown',0],
+					['beard','Barba Grossa Marrom','thick_brown',0],
+				//Neck
+					['neck','Gravata Sonserina','tie_s',0],
+					['neck','Gravata Grifinória','tie_g',0],
+					['neck','Gravata Lufalufa','tie_h',0],
+					['neck','Gravata Corvinal','tie_c',0],
 				//Upper Body
 					['upperBody','Capa Sonserina','cloak_s',0],
-					['upperBody','Cabelo Capa Grifinória','cloak_g',0],
+					['upperBody','Capa Grifinória','cloak_g',0],
+					['upperBody','Capa Lufalufa','cloak_h',0],
+					['upperBody','Capa Corvinal','cloak_c',0],
 				//Hand Right
 					['rightHand','Varinha Simples','wand_right',0]
 			]
@@ -142,6 +151,7 @@
 		basic['hairs'] = [];
 		basic['faces'] = [];
 		basic['beards'] = [];
+		basic['necks'] = [];
 		basic['upperBodys'] = [];
 		basic['rightHands'] = [];
 		/*basic['skin_selection'] = "SELECT `slug`, `name` FROM `MC_STYLES` WHERE `category` = 'skin'";
@@ -330,9 +340,11 @@
 		app.get('/', function(req, res){
 			res.render('login',{
 				skins:basic['skins'],
+				heads:basic['heads'],
 				hairs:basic['hairs'],
 				faces:basic['faces'],
 				beards:basic['beards'],
+				necks:basic['necks'],
 				upperBodys:basic['upperBodys'],
 				rightHands:basic['rightHands'],
 
